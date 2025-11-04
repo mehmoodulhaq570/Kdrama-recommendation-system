@@ -14,8 +14,8 @@ from rank_bm25 import BM25Okapi
 # ======================================================
 MODEL_NAME = "paraphrase-multilingual-mpnet-base-v2"
 CROSS_ENCODER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
-MODEL_DIR = r"D:\Projects\Kdrama-recommendation\model_training\models"
-INDEX_DIR = r"D:\Projects\Kdrama-recommendation\model_training\faiss_index"
+MODEL_DIR = r"D:\Projects\SeoulMate\model_traning\models"
+INDEX_DIR = r"D:\Projects\SeoulMate\model_traning\faiss_index"
 
 # ======================================================
 # FASTAPI SETUP
@@ -63,6 +63,7 @@ except Exception as e:
     use_reranker = False
     print(f"Warning: Could not load reranker ({e}). Continuing without it.")
 
+
 # ======================================================
 # STAGE 3 — HELPER FUNCTIONS
 # ======================================================
@@ -80,6 +81,7 @@ def cached_encode(text: str):
     emb = model.encode([text], convert_to_numpy=True)
     faiss.normalize_L2(emb)
     return emb
+
 
 # ======================================================
 # STAGE 4 — HYBRID RECOMMENDATION PIPELINE
@@ -101,7 +103,13 @@ def recommend(title: str, top_n=5, alpha=0.7):
         match, score = fuzzy_match_title(title)
         if match:
             drama = next((m for m in metadata if m["Title"] == match), None)
-            print(f"Fuzzy match: '{title}' -> '{match}' (confidence: {score:.1f}%)".encode('utf-8', errors='replace').decode('utf-8'))
+            print(
+                f"Fuzzy match: '{title}' -> '{match}' (confidence: {score:.1f}%)".encode(
+                    "utf-8", errors="replace"
+                ).decode(
+                    "utf-8"
+                )
+            )
 
             query_text = f"{drama['Title']} {drama.get('Genre', '')} {drama.get('Description', '')} {drama.get('Cast', '')}"
         else:
@@ -113,11 +121,15 @@ def recommend(title: str, top_n=5, alpha=0.7):
     # ---- Stage 4.2: FAISS Semantic Search ----
     query_emb = cached_encode(query_text)
     D, I = index.search(query_emb, top_n + 10)
-    faiss_results = [(metadata[idx], float(score)) for idx, score in zip(I[0], D[0]) if idx < len(metadata)]
+    faiss_results = [
+        (metadata[idx], float(score))
+        for idx, score in zip(I[0], D[0])
+        if idx < len(metadata)
+    ]
 
     # ---- Stage 4.3: BM25 Lexical Search ----
     bm25_scores = bm25.get_scores(query_text.split())
-    top_bm25_idx = np.argsort(bm25_scores)[::-1][:top_n + 10]
+    top_bm25_idx = np.argsort(bm25_scores)[::-1][: top_n + 10]
     bm25_results = [(metadata[i], float(bm25_scores[i])) for i in top_bm25_idx]
 
     # ---- Stage 4.4: Combine Results ----
@@ -126,21 +138,31 @@ def recommend(title: str, top_n=5, alpha=0.7):
     for rec, score in faiss_results:
         combined_scores[rec["Title"]] = alpha * score
     for rec, score in bm25_results:
-        combined_scores[rec["Title"]] = combined_scores.get(rec["Title"], 0) + (1 - alpha) * (score / max_bm25)
+        combined_scores[rec["Title"]] = combined_scores.get(rec["Title"], 0) + (
+            1 - alpha
+        ) * (score / max_bm25)
 
     sorted_results = sorted(combined_scores.items(), key=lambda x: x[1], reverse=True)
-    top_results = [next(m for m in metadata if m["Title"] == t) for t, _ in sorted_results[:top_n]]
+    top_results = [
+        next(m for m in metadata if m["Title"] == t) for t, _ in sorted_results[:top_n]
+    ]
 
     # ---- Stage 4.5: Optional Reranking ----
     if use_reranker and reranker:
         try:
             pairs = [[query_text, r["Description"]] for r in top_results]
             rerank_scores = reranker.predict(pairs)
-            top_results = [r for _, r in sorted(zip(rerank_scores, top_results), key=lambda x: x[0], reverse=True)]
+            top_results = [
+                r
+                for _, r in sorted(
+                    zip(rerank_scores, top_results), key=lambda x: x[0], reverse=True
+                )
+            ]
         except Exception as e:
             print(f"Reranking failed: {e}")
 
     return {"query": {"Title": title}, "recommendations": top_results[:top_n]}
+
 
 # ======================================================
 # STAGE 5 — API ROUTES
@@ -152,15 +174,16 @@ def root():
 
 @app.get("/recommend")
 def get_recommendations(
-    title: str = Query(..., description="Kdrama title or user query"),
-    top_n: int = 5
+    title: str = Query(..., description="Kdrama title or user query"), top_n: int = 5
 ):
     """Main recommendation endpoint."""
     return recommend(title, top_n)
+
 
 # ======================================================
 # STAGE 6 — RUN LOCALLY
 # ======================================================
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run("app:app", host="127.0.0.1", port=8001, reload=True)
