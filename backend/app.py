@@ -7,7 +7,7 @@ import numpy as np
 from sentence_transformers import SentenceTransformer, CrossEncoder
 from rapidfuzz import process, fuzz
 from functools import lru_cache
-from rank_bm25 import BM25Okapi
+from rank_bm25 import BM25Plus
 
 # ======================================================
 # CONFIGURATION
@@ -46,7 +46,8 @@ corpus = [
     f"{m.get('Title', '')} {m.get('Genre', '')} {m.get('Description', '')} {m.get('Cast', '')}"
     for m in metadata
 ]
-bm25 = BM25Okapi([doc.split() for doc in corpus])
+# Using BM25Plus for better performance (improved IDF handling)
+bm25 = BM25Plus([doc.split() for doc in corpus])
 
 print(f"Loaded {len(metadata)} dramas successfully.")
 
