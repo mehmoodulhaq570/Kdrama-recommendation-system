@@ -35,7 +35,25 @@ app.add_middleware(
 # ======================================================
 print("Stage 1: Loading models and FAISS index...")
 
-model = SentenceTransformer(MODEL_NAME, cache_folder=MODEL_DIR)
+# Try to load fine-tuned SBERT first, fallback to pretrained
+finetuned_models = (
+    [
+        d
+        for d in os.listdir(MODEL_DIR)
+        if os.path.isdir(os.path.join(MODEL_DIR, d)) and d.startswith("sbert-finetuned")
+    ]
+    if os.path.exists(MODEL_DIR)
+    else []
+)
+
+if finetuned_models:
+    model_path = os.path.join(MODEL_DIR, finetuned_models[0])
+    print(f"Loading fine-tuned SBERT from: {model_path}")
+    model = SentenceTransformer(model_path)
+else:
+    print(f"No fine-tuned model found, using pretrained: {MODEL_NAME}")
+    model = SentenceTransformer(MODEL_NAME, cache_folder=MODEL_DIR)
+
 index = faiss.read_index(os.path.join(INDEX_DIR, "index.faiss"))
 
 with open(os.path.join(INDEX_DIR, "meta.pkl"), "rb") as f:

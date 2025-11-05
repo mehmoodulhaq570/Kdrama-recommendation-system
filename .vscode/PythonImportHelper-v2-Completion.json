@@ -148,7 +148,7 @@
         "documentation": {}
     },
     {
-        "label": "BM25Okapi",
+        "label": "BM25Plus",
         "importPath": "rank_bm25",
         "description": "rank_bm25",
         "isExtraImport": true,
@@ -490,14 +490,6 @@
         "documentation": {}
     },
     {
-        "label": "AdamW",
-        "importPath": "transformers",
-        "description": "transformers",
-        "isExtraImport": true,
-        "detail": "transformers",
-        "documentation": {}
-    },
-    {
         "label": "fuzzy_match_title",
         "kind": 2,
         "importPath": "backend.app",
@@ -588,11 +580,11 @@
         "documentation": {}
     },
     {
-        "label": "model",
+        "label": "finetuned_models",
         "kind": 5,
         "importPath": "backend.app",
         "description": "backend.app",
-        "peekOfCode": "model = SentenceTransformer(MODEL_NAME, cache_folder=MODEL_DIR)\nindex = faiss.read_index(os.path.join(INDEX_DIR, \"index.faiss\"))\nwith open(os.path.join(INDEX_DIR, \"meta.pkl\"), \"rb\") as f:\n    metadata = pickle.load(f)\ntitles = [m[\"Title\"] for m in metadata]\ncorpus = [\n    f\"{m.get('Title', '')} {m.get('Genre', '')} {m.get('Description', '')} {m.get('Cast', '')}\"\n    for m in metadata\n]\nbm25 = BM25Okapi([doc.split() for doc in corpus])",
+        "peekOfCode": "finetuned_models = (\n    [\n        d\n        for d in os.listdir(MODEL_DIR)\n        if os.path.isdir(os.path.join(MODEL_DIR, d)) and d.startswith(\"sbert-finetuned\")\n    ]\n    if os.path.exists(MODEL_DIR)\n    else []\n)\nif finetuned_models:",
         "detail": "backend.app",
         "documentation": {}
     },
@@ -601,7 +593,7 @@
         "kind": 5,
         "importPath": "backend.app",
         "description": "backend.app",
-        "peekOfCode": "index = faiss.read_index(os.path.join(INDEX_DIR, \"index.faiss\"))\nwith open(os.path.join(INDEX_DIR, \"meta.pkl\"), \"rb\") as f:\n    metadata = pickle.load(f)\ntitles = [m[\"Title\"] for m in metadata]\ncorpus = [\n    f\"{m.get('Title', '')} {m.get('Genre', '')} {m.get('Description', '')} {m.get('Cast', '')}\"\n    for m in metadata\n]\nbm25 = BM25Okapi([doc.split() for doc in corpus])\nprint(f\"Loaded {len(metadata)} dramas successfully.\")",
+        "peekOfCode": "index = faiss.read_index(os.path.join(INDEX_DIR, \"index.faiss\"))\nwith open(os.path.join(INDEX_DIR, \"meta.pkl\"), \"rb\") as f:\n    metadata = pickle.load(f)\ntitles = [m[\"Title\"] for m in metadata]\ncorpus = [\n    f\"{m.get('Title', '')} {m.get('Genre', '')} {m.get('Description', '')} {m.get('Cast', '')}\"\n    for m in metadata\n]\n# Using BM25Plus for better performance (improved IDF handling)\nbm25 = BM25Plus([doc.split() for doc in corpus])",
         "detail": "backend.app",
         "documentation": {}
     },
@@ -610,7 +602,7 @@
         "kind": 5,
         "importPath": "backend.app",
         "description": "backend.app",
-        "peekOfCode": "titles = [m[\"Title\"] for m in metadata]\ncorpus = [\n    f\"{m.get('Title', '')} {m.get('Genre', '')} {m.get('Description', '')} {m.get('Cast', '')}\"\n    for m in metadata\n]\nbm25 = BM25Okapi([doc.split() for doc in corpus])\nprint(f\"Loaded {len(metadata)} dramas successfully.\")\n# ======================================================\n# STAGE 2 — LOAD OPTIONAL RERANKER\n# ======================================================",
+        "peekOfCode": "titles = [m[\"Title\"] for m in metadata]\ncorpus = [\n    f\"{m.get('Title', '')} {m.get('Genre', '')} {m.get('Description', '')} {m.get('Cast', '')}\"\n    for m in metadata\n]\n# Using BM25Plus for better performance (improved IDF handling)\nbm25 = BM25Plus([doc.split() for doc in corpus])\nprint(f\"Loaded {len(metadata)} dramas successfully.\")\n# ======================================================\n# STAGE 2 — LOAD OPTIONAL RERANKER",
         "detail": "backend.app",
         "documentation": {}
     },
@@ -619,7 +611,7 @@
         "kind": 5,
         "importPath": "backend.app",
         "description": "backend.app",
-        "peekOfCode": "corpus = [\n    f\"{m.get('Title', '')} {m.get('Genre', '')} {m.get('Description', '')} {m.get('Cast', '')}\"\n    for m in metadata\n]\nbm25 = BM25Okapi([doc.split() for doc in corpus])\nprint(f\"Loaded {len(metadata)} dramas successfully.\")\n# ======================================================\n# STAGE 2 — LOAD OPTIONAL RERANKER\n# ======================================================\ntry:",
+        "peekOfCode": "corpus = [\n    f\"{m.get('Title', '')} {m.get('Genre', '')} {m.get('Description', '')} {m.get('Cast', '')}\"\n    for m in metadata\n]\n# Using BM25Plus for better performance (improved IDF handling)\nbm25 = BM25Plus([doc.split() for doc in corpus])\nprint(f\"Loaded {len(metadata)} dramas successfully.\")\n# ======================================================\n# STAGE 2 — LOAD OPTIONAL RERANKER\n# ======================================================",
         "detail": "backend.app",
         "documentation": {}
     },
@@ -628,7 +620,7 @@
         "kind": 5,
         "importPath": "backend.app",
         "description": "backend.app",
-        "peekOfCode": "bm25 = BM25Okapi([doc.split() for doc in corpus])\nprint(f\"Loaded {len(metadata)} dramas successfully.\")\n# ======================================================\n# STAGE 2 — LOAD OPTIONAL RERANKER\n# ======================================================\ntry:\n    print(\"Stage 2: Loading cross-encoder reranker...\")\n    reranker = CrossEncoder(CROSS_ENCODER_MODEL)\n    use_reranker = True\n    print(\"Cross-encoder reranker loaded successfully.\")",
+        "peekOfCode": "bm25 = BM25Plus([doc.split() for doc in corpus])\nprint(f\"Loaded {len(metadata)} dramas successfully.\")\n# ======================================================\n# STAGE 2 — LOAD OPTIONAL RERANKER\n# ======================================================\ntry:\n    print(\"Stage 2: Loading cross-encoder reranker...\")\n    reranker = CrossEncoder(CROSS_ENCODER_MODEL)\n    use_reranker = True\n    print(\"Cross-encoder reranker loaded successfully.\")",
         "detail": "backend.app",
         "documentation": {}
     },
@@ -916,7 +908,7 @@
         "kind": 5,
         "importPath": "model_traning.build_index",
         "description": "model_traning.build_index",
-        "peekOfCode": "DATA_PATH = r\"D:\\Projects\\SeoulMate\\dataset\\dramalist_kdramas.xlsx\"\nMODEL_NAME = \"paraphrase-multilingual-mpnet-base-v2\"\nMODEL_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\models\"\nINDEX_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\faiss_index\"\nos.makedirs(MODEL_DIR, exist_ok=True)\nos.makedirs(INDEX_DIR, exist_ok=True)\n# If you've fine-tuned a local SBERT model, save it to MODEL_DIR/sbert-finetuned\n# The script will prefer this local model automatically when present.\nFINETUNED_SUBDIR = \"sbert-finetuned-cpu-test\"\nLOCAL_FINETUNED_PATH = os.path.join(MODEL_DIR, FINETUNED_SUBDIR)",
+        "peekOfCode": "DATA_PATH = r\"D:\\Projects\\SeoulMate\\dataset\\dramalist_kdramas.xlsx\"\nMODEL_NAME = \"paraphrase-multilingual-mpnet-base-v2\"\nMODEL_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\models\"\nINDEX_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\faiss_index\"\nos.makedirs(MODEL_DIR, exist_ok=True)\nos.makedirs(INDEX_DIR, exist_ok=True)\n# If you've fine-tuned a local SBERT model, save it to MODEL_DIR/sbert-finetuned*\n# The script will prefer any local fine-tuned model automatically when present.\nFINETUNED_PREFIX = \"sbert-finetuned\"\n# ======================================================",
         "detail": "model_traning.build_index",
         "documentation": {}
     },
@@ -925,7 +917,7 @@
         "kind": 5,
         "importPath": "model_traning.build_index",
         "description": "model_traning.build_index",
-        "peekOfCode": "MODEL_NAME = \"paraphrase-multilingual-mpnet-base-v2\"\nMODEL_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\models\"\nINDEX_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\faiss_index\"\nos.makedirs(MODEL_DIR, exist_ok=True)\nos.makedirs(INDEX_DIR, exist_ok=True)\n# If you've fine-tuned a local SBERT model, save it to MODEL_DIR/sbert-finetuned\n# The script will prefer this local model automatically when present.\nFINETUNED_SUBDIR = \"sbert-finetuned-cpu-test\"\nLOCAL_FINETUNED_PATH = os.path.join(MODEL_DIR, FINETUNED_SUBDIR)\n# ======================================================",
+        "peekOfCode": "MODEL_NAME = \"paraphrase-multilingual-mpnet-base-v2\"\nMODEL_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\models\"\nINDEX_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\faiss_index\"\nos.makedirs(MODEL_DIR, exist_ok=True)\nos.makedirs(INDEX_DIR, exist_ok=True)\n# If you've fine-tuned a local SBERT model, save it to MODEL_DIR/sbert-finetuned*\n# The script will prefer any local fine-tuned model automatically when present.\nFINETUNED_PREFIX = \"sbert-finetuned\"\n# ======================================================\n# 2. Load and Prepare Dataset",
         "detail": "model_traning.build_index",
         "documentation": {}
     },
@@ -934,7 +926,7 @@
         "kind": 5,
         "importPath": "model_traning.build_index",
         "description": "model_traning.build_index",
-        "peekOfCode": "MODEL_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\models\"\nINDEX_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\faiss_index\"\nos.makedirs(MODEL_DIR, exist_ok=True)\nos.makedirs(INDEX_DIR, exist_ok=True)\n# If you've fine-tuned a local SBERT model, save it to MODEL_DIR/sbert-finetuned\n# The script will prefer this local model automatically when present.\nFINETUNED_SUBDIR = \"sbert-finetuned-cpu-test\"\nLOCAL_FINETUNED_PATH = os.path.join(MODEL_DIR, FINETUNED_SUBDIR)\n# ======================================================\n# 2. Load and Prepare Dataset",
+        "peekOfCode": "MODEL_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\models\"\nINDEX_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\faiss_index\"\nos.makedirs(MODEL_DIR, exist_ok=True)\nos.makedirs(INDEX_DIR, exist_ok=True)\n# If you've fine-tuned a local SBERT model, save it to MODEL_DIR/sbert-finetuned*\n# The script will prefer any local fine-tuned model automatically when present.\nFINETUNED_PREFIX = \"sbert-finetuned\"\n# ======================================================\n# 2. Load and Prepare Dataset\n# ======================================================",
         "detail": "model_traning.build_index",
         "documentation": {}
     },
@@ -943,25 +935,16 @@
         "kind": 5,
         "importPath": "model_traning.build_index",
         "description": "model_traning.build_index",
-        "peekOfCode": "INDEX_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\faiss_index\"\nos.makedirs(MODEL_DIR, exist_ok=True)\nos.makedirs(INDEX_DIR, exist_ok=True)\n# If you've fine-tuned a local SBERT model, save it to MODEL_DIR/sbert-finetuned\n# The script will prefer this local model automatically when present.\nFINETUNED_SUBDIR = \"sbert-finetuned-cpu-test\"\nLOCAL_FINETUNED_PATH = os.path.join(MODEL_DIR, FINETUNED_SUBDIR)\n# ======================================================\n# 2. Load and Prepare Dataset\n# ======================================================",
+        "peekOfCode": "INDEX_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\faiss_index\"\nos.makedirs(MODEL_DIR, exist_ok=True)\nos.makedirs(INDEX_DIR, exist_ok=True)\n# If you've fine-tuned a local SBERT model, save it to MODEL_DIR/sbert-finetuned*\n# The script will prefer any local fine-tuned model automatically when present.\nFINETUNED_PREFIX = \"sbert-finetuned\"\n# ======================================================\n# 2. Load and Prepare Dataset\n# ======================================================\nprint(\"Loading dataset...\")",
         "detail": "model_traning.build_index",
         "documentation": {}
     },
     {
-        "label": "FINETUNED_SUBDIR",
+        "label": "FINETUNED_PREFIX",
         "kind": 5,
         "importPath": "model_traning.build_index",
         "description": "model_traning.build_index",
-        "peekOfCode": "FINETUNED_SUBDIR = \"sbert-finetuned-cpu-test\"\nLOCAL_FINETUNED_PATH = os.path.join(MODEL_DIR, FINETUNED_SUBDIR)\n# ======================================================\n# 2. Load and Prepare Dataset\n# ======================================================\nprint(\"Loading dataset...\")\ndf = pd.read_excel(DATA_PATH)\ndf.fillna(\"\", inplace=True)\n# Map column names to standardized format\ncolumn_mapping = {",
-        "detail": "model_traning.build_index",
-        "documentation": {}
-    },
-    {
-        "label": "LOCAL_FINETUNED_PATH",
-        "kind": 5,
-        "importPath": "model_traning.build_index",
-        "description": "model_traning.build_index",
-        "peekOfCode": "LOCAL_FINETUNED_PATH = os.path.join(MODEL_DIR, FINETUNED_SUBDIR)\n# ======================================================\n# 2. Load and Prepare Dataset\n# ======================================================\nprint(\"Loading dataset...\")\ndf = pd.read_excel(DATA_PATH)\ndf.fillna(\"\", inplace=True)\n# Map column names to standardized format\ncolumn_mapping = {\n    \"title\": \"Title\",",
+        "peekOfCode": "FINETUNED_PREFIX = \"sbert-finetuned\"\n# ======================================================\n# 2. Load and Prepare Dataset\n# ======================================================\nprint(\"Loading dataset...\")\ndf = pd.read_excel(DATA_PATH)\ndf.fillna(\"\", inplace=True)\n# Map column names to standardized format\ncolumn_mapping = {\n    \"title\": \"Title\",",
         "detail": "model_traning.build_index",
         "documentation": {}
     },
@@ -997,7 +980,7 @@
         "kind": 5,
         "importPath": "model_traning.build_index",
         "description": "model_traning.build_index",
-        "peekOfCode": "available_features = [col for col in text_features if col in df.columns]\ndf[\"content\"] = df[available_features].astype(str).agg(\" \".join, axis=1)\n# ======================================================\n# 3. Load SentenceTransformer Model\n# ======================================================\nprint(\"Loading SentenceTransformer model...\")\n# Look for a local fine-tuned folder. We accept either the exact\n# `sbert-finetuned` name or any folder starting with that prefix\nselected_local = None\nif os.path.isdir(LOCAL_FINETUNED_PATH):",
+        "peekOfCode": "available_features = [col for col in text_features if col in df.columns]\ndf[\"content\"] = df[available_features].astype(str).agg(\" \".join, axis=1)\n# ======================================================\n# 3. Load SentenceTransformer Model\n# ======================================================\nprint(\"Loading SentenceTransformer model...\")\n# Look for any local fine-tuned folder starting with 'sbert-finetuned'\n# Prefer 'sbert-finetuned-full' if exists, else use most recent\nselected_local = None\ntry:",
         "detail": "model_traning.build_index",
         "documentation": {}
     },
@@ -1006,7 +989,7 @@
         "kind": 5,
         "importPath": "model_traning.build_index",
         "description": "model_traning.build_index",
-        "peekOfCode": "df[\"content\"] = df[available_features].astype(str).agg(\" \".join, axis=1)\n# ======================================================\n# 3. Load SentenceTransformer Model\n# ======================================================\nprint(\"Loading SentenceTransformer model...\")\n# Look for a local fine-tuned folder. We accept either the exact\n# `sbert-finetuned` name or any folder starting with that prefix\nselected_local = None\nif os.path.isdir(LOCAL_FINETUNED_PATH):\n    selected_local = LOCAL_FINETUNED_PATH",
+        "peekOfCode": "df[\"content\"] = df[available_features].astype(str).agg(\" \".join, axis=1)\n# ======================================================\n# 3. Load SentenceTransformer Model\n# ======================================================\nprint(\"Loading SentenceTransformer model...\")\n# Look for any local fine-tuned folder starting with 'sbert-finetuned'\n# Prefer 'sbert-finetuned-full' if exists, else use most recent\nselected_local = None\ntry:\n    candidates = [",
         "detail": "model_traning.build_index",
         "documentation": {}
     },
@@ -1015,7 +998,7 @@
         "kind": 5,
         "importPath": "model_traning.build_index",
         "description": "model_traning.build_index",
-        "peekOfCode": "selected_local = None\nif os.path.isdir(LOCAL_FINETUNED_PATH):\n    selected_local = LOCAL_FINETUNED_PATH\nelse:\n    # search for folders like 'sbert-finetuned*' (e.g. sbert-finetuned-cpu-test)\n    try:\n        for name in os.listdir(MODEL_DIR):\n            if name.startswith(FINETUNED_SUBDIR) and os.path.isdir(\n                os.path.join(MODEL_DIR, name)\n            ):",
+        "peekOfCode": "selected_local = None\ntry:\n    candidates = [\n        name\n        for name in os.listdir(MODEL_DIR)\n        if name.startswith(FINETUNED_PREFIX)\n        and os.path.isdir(os.path.join(MODEL_DIR, name))\n    ]\n    if candidates:\n        # Prefer 'sbert-finetuned-full' if available",
         "detail": "model_traning.build_index",
         "documentation": {}
     },
