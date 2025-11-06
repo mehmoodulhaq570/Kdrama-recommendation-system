@@ -539,7 +539,7 @@
         "kind": 5,
         "importPath": "backend.app",
         "description": "backend.app",
-        "peekOfCode": "MODEL_NAME = \"paraphrase-multilingual-mpnet-base-v2\"\nCROSS_ENCODER_MODEL = \"cross-encoder/ms-marco-MiniLM-L-6-v2\"\nMODEL_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\models\"\nINDEX_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\faiss_index\"\n# ======================================================\n# FASTAPI SETUP\n# ======================================================\napp = FastAPI(title=\"Kdrama Hybrid Recommendation API\", version=\"3.1\")\napp.add_middleware(\n    CORSMiddleware,",
+        "peekOfCode": "MODEL_NAME = \"paraphrase-multilingual-mpnet-base-v2\"\n# Using fine-tuned cross-encoder trained on K-drama data\nCROSS_ENCODER_MODEL = r\"D:\\Projects\\SeoulMate\\model_traning\\models\\cross-enc-excellent\"\nMODEL_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\models\"\nINDEX_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\faiss_index\"\n# ======================================================\n# FASTAPI SETUP\n# ======================================================\napp = FastAPI(title=\"Kdrama Hybrid Recommendation API\", version=\"3.1\")\napp.add_middleware(",
         "detail": "backend.app",
         "documentation": {}
     },
@@ -548,7 +548,7 @@
         "kind": 5,
         "importPath": "backend.app",
         "description": "backend.app",
-        "peekOfCode": "CROSS_ENCODER_MODEL = \"cross-encoder/ms-marco-MiniLM-L-6-v2\"\nMODEL_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\models\"\nINDEX_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\faiss_index\"\n# ======================================================\n# FASTAPI SETUP\n# ======================================================\napp = FastAPI(title=\"Kdrama Hybrid Recommendation API\", version=\"3.1\")\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],",
+        "peekOfCode": "CROSS_ENCODER_MODEL = r\"D:\\Projects\\SeoulMate\\model_traning\\models\\cross-enc-excellent\"\nMODEL_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\models\"\nINDEX_DIR = r\"D:\\Projects\\SeoulMate\\model_traning\\faiss_index\"\n# ======================================================\n# FASTAPI SETUP\n# ======================================================\napp = FastAPI(title=\"Kdrama Hybrid Recommendation API\", version=\"3.1\")\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],",
         "detail": "backend.app",
         "documentation": {}
     },

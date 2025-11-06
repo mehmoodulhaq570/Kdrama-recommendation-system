@@ -13,7 +13,8 @@ from rank_bm25 import BM25Plus
 # CONFIGURATION
 # ======================================================
 MODEL_NAME = "paraphrase-multilingual-mpnet-base-v2"
-CROSS_ENCODER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+# Using fine-tuned cross-encoder trained on K-drama data
+CROSS_ENCODER_MODEL = r"D:\Projects\SeoulMate\model_traning\models\cross-enc-excellent"
 MODEL_DIR = r"D:\Projects\SeoulMate\model_traning\models"
 INDEX_DIR = r"D:\Projects\SeoulMate\model_traning\faiss_index"
 
