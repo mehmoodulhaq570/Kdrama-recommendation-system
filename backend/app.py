@@ -106,7 +106,31 @@ def cached_encode(text: str):
 # ======================================================
 # STAGE 4 — HYBRID RECOMMENDATION PIPELINE
 # ======================================================
-def recommend(title: str, top_n=5, alpha=0.7):
+def recommend(
+    title: str,
+    top_n=5,
+    alpha=0.7,
+    genre=None,
+    director=None,
+    publisher=None,
+    episodes=None,
+    top_rated=False,
+    description=None,
+    content_rating=None,
+    popularity=None,
+    ranked=None,
+    watchers=None,
+    rating_value=None,
+    rating_count=None,
+    date_published=None,
+    keywords=None,
+    actors=None,
+    screenwriters=None,
+    sort_by=None,
+    sort_order="desc",
+    mood=None,
+    similar_to=None,
+):
     """
     Stage-based pipeline:
     1. Resolve user input (fuzzy match or free-text)
@@ -162,11 +186,177 @@ def recommend(title: str, top_n=5, alpha=0.7):
             1 - alpha
         ) * (score / max_bm25)
 
-    sorted_results = sorted(combined_scores.items(), key=lambda x: x[1], reverse=True)
-    top_results = [
-        next(m for m in metadata if m["Title"] == t) for t, _ in sorted_results[:top_n]
+    # ...existing code...
+    # Apply filters
+    filtered = [
+        next(m for m in metadata if m["Title"] == t)
+        for t, _ in sorted(combined_scores.items(), key=lambda x: x[1], reverse=True)
     ]
-
+    if genre:
+        filtered = [
+            r
+            for r in filtered
+            if genre.lower() in str(r.get("Genre", "")).lower()
+            or genre.lower() in str(r.get("genres", "")).lower()
+        ]
+    if director:
+        filtered = [
+            r
+            for r in filtered
+            if director.lower() in str(r.get("Director", "")).lower()
+            or director.lower() in str(r.get("directors", "")).lower()
+        ]
+    if publisher:
+        filtered = [
+            r
+            for r in filtered
+            if publisher.lower() in str(r.get("publisher", "")).lower()
+        ]
+    if episodes:
+        try:
+            episodes_int = int(episodes)
+            filtered = [
+                r
+                for r in filtered
+                if str(r.get("episodes", r.get("Episodes", ""))) == str(episodes_int)
+            ]
+        except Exception:
+            pass
+    if description:
+        filtered = [
+            r
+            for r in filtered
+            if description.lower() in str(r.get("Description", "")).lower()
+            or description.lower() in str(r.get("description", "")).lower()
+        ]
+    if content_rating:
+        filtered = [
+            r
+            for r in filtered
+            if content_rating.lower() in str(r.get("content_rating", "")).lower()
+        ]
+    if popularity:
+        try:
+            popularity_val = float(popularity)
+            filtered = [
+                r for r in filtered if float(r.get("popularity", 0)) >= popularity_val
+            ]
+        except Exception:
+            pass
+    if ranked:
+        try:
+            ranked_val = float(ranked)
+            filtered = [r for r in filtered if float(r.get("ranked", 0)) <= ranked_val]
+        except Exception:
+            pass
+    if watchers:
+        try:
+            watchers_val = float(watchers)
+            filtered = [
+                r for r in filtered if float(r.get("watchers", 0)) >= watchers_val
+            ]
+        except Exception:
+            pass
+    if rating_value:
+        try:
+            rating_value_val = float(rating_value)
+            filtered = [
+                r
+                for r in filtered
+                if float(r.get("rating_value", r.get("score", 0))) >= rating_value_val
+            ]
+        except Exception:
+            pass
+    if rating_count:
+        try:
+            rating_count_val = float(rating_count)
+            filtered = [
+                r
+                for r in filtered
+                if float(r.get("rating_count", 0)) >= rating_count_val
+            ]
+        except Exception:
+            pass
+    if date_published:
+        # Accept year or range (e.g., '2015' or '2010-2020')
+        if "-" in str(date_published):
+            try:
+                start, end = map(int, str(date_published).split("-"))
+                filtered = [
+                    r
+                    for r in filtered
+                    if r.get("date_published")
+                    and start <= int(str(r.get("date_published"))[:4]) <= end
+                ]
+            except Exception:
+                pass
+        else:
+            try:
+                year = int(str(date_published))
+                filtered = [
+                    r
+                    for r in filtered
+                    if r.get("date_published")
+                    and int(str(r.get("date_published"))[:4]) == year
+                ]
+            except Exception:
+                pass
+    if keywords:
+        filtered = [
+            r
+            for r in filtered
+            if keywords.lower() in str(r.get("keywords", "")).lower()
+        ]
+    if actors:
+        filtered = [
+            r for r in filtered if actors.lower() in str(r.get("actors", "")).lower()
+        ]
+    if screenwriters:
+        filtered = [
+            r
+            for r in filtered
+            if screenwriters.lower() in str(r.get("screenwriters", "")).lower()
+        ]
+    if mood:
+        filtered = [
+            r
+            for r in filtered
+            if mood.lower() in str(r.get("keywords", "")).lower()
+            or mood.lower() in str(r.get("description", "")).lower()
+        ]
+    if similar_to:
+        # Find dramas similar to a given title (semantic search)
+        sim_drama = next(
+            (m for m in metadata if m["Title"].lower() == similar_to.lower()), None
+        )
+        if sim_drama:
+            sim_query = f"{sim_drama['Title']} {sim_drama.get('Genre', '')} {sim_drama.get('Description', '')} {sim_drama.get('Cast', '')}"
+            sim_emb = cached_encode(sim_query)
+            D_sim, I_sim = index.search(sim_emb, top_n + 10)
+            sim_titles = [
+                metadata[idx]["Title"] for idx in I_sim[0] if idx < len(metadata)
+            ]
+            filtered = [r for r in filtered if r["Title"] in sim_titles]
+    # Sorting
+    if sort_by:
+        reverse = sort_order == "desc"
+        filtered = sorted(
+            filtered,
+            key=lambda r: (
+                float(r.get(sort_by, 0))
+                if isinstance(r.get(sort_by, 0), (int, float, str))
+                and str(r.get(sort_by, 0)).replace(".", "", 1).isdigit()
+                else str(r.get(sort_by, ""))
+            ),
+            reverse=reverse,
+        )
+    elif top_rated:
+        filtered = sorted(
+            filtered,
+            key=lambda r: float(r.get("rating_value", r.get("score", 0))),
+            reverse=True,
+        )
+    top_results = filtered[:top_n]
     # ---- Stage 4.5: Optional Reranking ----
     if use_reranker and reranker:
         try:
@@ -181,7 +371,32 @@ def recommend(title: str, top_n=5, alpha=0.7):
         except Exception as e:
             print(f"Reranking failed: {e}")
 
-    return {"queryok ok": {"Title": title}, "recommendations": top_results[:top_n]}
+    return {
+        "query": {"Title": title},
+        "filters": {
+            "genre": genre,
+            "director": director,
+            "publisher": publisher,
+            "episodes": episodes,
+            "top_rated": top_rated,
+            "description": description,
+            "content_rating": content_rating,
+            "popularity": popularity,
+            "ranked": ranked,
+            "watchers": watchers,
+            "rating_value": rating_value,
+            "rating_count": rating_count,
+            "date_published": date_published,
+            "keywords": keywords,
+            "actors": actors,
+            "screenwriters": screenwriters,
+            "sort_by": sort_by,
+            "sort_order": sort_order,
+            "mood": mood,
+            "similar_to": similar_to,
+        },
+        "recommendations": top_results,
+    }
 
 
 # ======================================================
@@ -194,10 +409,59 @@ def root():
 
 @app.get("/recommend")
 def get_recommendations(
-    title: str = Query(..., description="Kdrama title or user query"), top_n: int = 5
+    title: str = Query(..., description="Kdrama title or user query"),
+    top_n: int = Query(5, description="Number of recommendations"),
+    genre: str = Query(None, description="Genre filter"),
+    director: str = Query(None, description="Director filter"),
+    publisher: str = Query(None, description="Publisher filter"),
+    episodes: int = Query(None, description="Episode count filter"),
+    top_rated: bool = Query(False, description="Sort by top rating"),
+    description: str = Query(None, description="Description keyword filter"),
+    content_rating: str = Query(None, description="Content rating filter"),
+    popularity: float = Query(None, description="Popularity filter (min value)"),
+    ranked: float = Query(None, description="Ranked filter (max value)"),
+    watchers: float = Query(None, description="Watchers filter (min value)"),
+    rating_value: float = Query(None, description="Minimum rating value"),
+    rating_count: float = Query(None, description="Minimum rating count"),
+    date_published: str = Query(None, description="Year or range (YYYY or YYYY-YYYY)"),
+    keywords: str = Query(None, description="Keywords filter"),
+    actors: str = Query(None, description="Actors filter"),
+    screenwriters: str = Query(None, description="Screenwriters filter"),
+    sort_by: str = Query(
+        None,
+        description="Sort by field (e.g., rating_value, popularity, date_published, episodes, duration)",
+    ),
+    sort_order: str = Query("desc", description="Sort order: asc or desc"),
+    mood: str = Query(
+        None, description="Mood-based filter (e.g., feel-good, suspenseful, romantic)"
+    ),
+    similar_to: str = Query(None, description="Find dramas similar to this title"),
 ):
-    """Main recommendation endpoint."""
-    return recommend(title, top_n)
+    """Main recommendation endpoint with advanced filters and sorting."""
+    return recommend(
+        title,
+        top_n,
+        genre,
+        director,
+        publisher,
+        episodes,
+        top_rated,
+        description,
+        content_rating,
+        popularity,
+        ranked,
+        watchers,
+        rating_value,
+        rating_count,
+        date_published,
+        keywords,
+        actors,
+        screenwriters,
+        sort_by,
+        sort_order,
+        mood,
+        similar_to,
+    )
 
 
 # ======================================================
