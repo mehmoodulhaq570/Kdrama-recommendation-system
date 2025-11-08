@@ -9,3 +9,6 @@ __pycache__/
 logs/
 .idea/
 *.log
+.idea
+.vscode/
+.ipynb_checkpoints/
