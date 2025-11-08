@@ -942,7 +942,7 @@
         "kind": 2,
         "importPath": "frontend.streamlit_app",
         "description": "frontend.streamlit_app",
-        "peekOfCode": "def format_drama_card(drama: Dict, rank: int) -> str:\n    \"\"\"Format drama data into HTML card\"\"\"\n    title = drama.get(\"Title\", \"Unknown\")\n    genre = drama.get(\"Genre\", \"N/A\")\n    description = drama.get(\"Description\", \"No description available\")[:200] + \"...\"\n    cast = drama.get(\"Cast\", \"N/A\")\n    return f\"\"\"\n    <div class=\"drama-card\">\n        <div class=\"drama-title\">#{rank} {title}</div>\n        <div class=\"drama-info\">",
+        "peekOfCode": "def format_drama_card(drama: Dict, rank: int) -> str:\n    \"\"\"Format drama data into HTML card\"\"\"\n    title = drama.get(\"Title\", \"Unknown\")\n    genre = drama.get(\"Genre\", drama.get(\"genres\", \"N/A\"))\n    description = drama.get(\n        \"Description\", drama.get(\"description\", \"No description available\")\n    )\n    # Truncate description\n    if len(description) > 250:\n        description = description[:250] + \"...\"",
         "detail": "frontend.streamlit_app",
         "documentation": {}
     },
