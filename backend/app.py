@@ -125,98 +125,51 @@ def recommend(
 ):
     """
     Stage-based pipeline:
+    0. Apply filters to create filtered corpus (PRE-FILTERING)
     1. Resolve user input (fuzzy match or free-text)
-    2. Semantic search (FAISS)
-    3. Lexical search (BM25)
+    2. Semantic search (FAISS) on filtered corpus
+    3. Lexical search (BM25) on filtered corpus
     4. Hybrid combination
     5. Optional reranking (Cross-Encoder)
     """
 
-    # ---- Stage 4.1: Title resolution ----
-    drama = next((m for m in metadata if m["Title"].lower() == title.lower()), None)
+    # ---- Stage 4.0: PRE-FILTER the dataset ----
+    filtered_metadata = metadata.copy()
 
-    if not drama:
-        match, score = fuzzy_match_title(title)
-        if match:
-            drama = next((m for m in metadata if m["Title"] == match), None)
-            print(
-                f"Fuzzy match: '{title}' -> '{match}' (confidence: {score:.1f}%)".encode(
-                    "utf-8", errors="replace"
-                ).decode(
-                    "utf-8"
-                )
-            )
-
-            query_text = f"{drama['Title']} {drama.get('Genre', '')} {drama.get('Description', '')} {drama.get('Cast', '')}"
-        else:
-            print(f"No close match found for '{title}', treating as free-text query.")
-            query_text = title
-    else:
-        query_text = f"{drama['Title']} {drama.get('Genre', '')} {drama.get('Description', '')} {drama.get('Cast', '')}"
-
-    # ---- Stage 4.2: FAISS Semantic Search ----
-    query_emb = cached_encode(query_text)
-    D, I = index.search(query_emb, top_n + 10)
-    faiss_results = [
-        (metadata[idx], float(score))
-        for idx, score in zip(I[0], D[0])
-        if idx < len(metadata)
-    ]
-
-    # ---- Stage 4.3: BM25 Lexical Search ----
-    bm25_scores = bm25.get_scores(query_text.split())
-    top_bm25_idx = np.argsort(bm25_scores)[::-1][: top_n + 10]
-    bm25_results = [(metadata[i], float(bm25_scores[i])) for i in top_bm25_idx]
-
-    # ---- Stage 4.4: Combine Results ----
-    combined_scores = {}
-    max_bm25 = max(bm25_scores) if max(bm25_scores) > 0 else 1
-    for rec, score in faiss_results:
-        combined_scores[rec["Title"]] = alpha * score
-    for rec, score in bm25_results:
-        combined_scores[rec["Title"]] = combined_scores.get(rec["Title"], 0) + (
-            1 - alpha
-        ) * (score / max_bm25)
-
-    # ...existing code...
-    # Apply filters
-    filtered = [
-        next(m for m in metadata if m["Title"] == t)
-        for t, _ in sorted(combined_scores.items(), key=lambda x: x[1], reverse=True)
-    ]
+    # Apply all filters to create a subset
     if genre:
-        filtered = [
+        filtered_metadata = [
             r
-            for r in filtered
+            for r in filtered_metadata
             if genre.lower() in str(r.get("Genre", "")).lower()
             or genre.lower() in str(r.get("genres", "")).lower()
         ]
     if director:
-        filtered = [
+        filtered_metadata = [
             r
-            for r in filtered
+            for r in filtered_metadata
             if director.lower() in str(r.get("Director", "")).lower()
             or director.lower() in str(r.get("directors", "")).lower()
         ]
     if publisher:
-        filtered = [
+        filtered_metadata = [
             r
-            for r in filtered
+            for r in filtered_metadata
             if publisher.lower() in str(r.get("publisher", "")).lower()
         ]
     if description:
-        filtered = [
+        filtered_metadata = [
             r
-            for r in filtered
+            for r in filtered_metadata
             if description.lower() in str(r.get("Description", "")).lower()
             or description.lower() in str(r.get("description", "")).lower()
         ]
     if rating_value:
         try:
             rating_value_val = float(rating_value)
-            filtered = [
+            filtered_metadata = [
                 r
-                for r in filtered
+                for r in filtered_metadata
                 if float(r.get("rating_value", r.get("score", 0))) >= rating_value_val
             ]
         except Exception:
@@ -224,38 +177,151 @@ def recommend(
     if rating_count:
         try:
             rating_count_val = float(rating_count)
-            filtered = [
+            filtered_metadata = [
                 r
-                for r in filtered
+                for r in filtered_metadata
                 if float(r.get("rating_count", 0)) >= rating_count_val
             ]
         except Exception:
             pass
     if keywords:
-        filtered = [
+        filtered_metadata = [
             r
-            for r in filtered
+            for r in filtered_metadata
             if keywords.lower() in str(r.get("keywords", "")).lower()
         ]
     if screenwriters:
-        filtered = [
+        filtered_metadata = [
             r
-            for r in filtered
+            for r in filtered_metadata
             if screenwriters.lower() in str(r.get("screenwriters", "")).lower()
         ]
+
+    # If no results after filtering, return empty
+    if not filtered_metadata:
+        return {
+            "query": {"Title": title},
+            "filters": {
+                "genre": genre,
+                "director": director,
+                "publisher": publisher,
+                "top_rated": top_rated,
+                "description": description,
+                "rating_value": rating_value,
+                "rating_count": rating_count,
+                "keywords": keywords,
+                "screenwriters": screenwriters,
+                "sort_by": sort_by,
+                "sort_order": sort_order,
+                "similar_to": similar_to,
+            },
+            "recommendations": [],
+            "message": "No dramas match your filters. Try broadening your search criteria.",
+        }
+
+    print(
+        f"Filtered corpus: {len(filtered_metadata)} dramas (from {len(metadata)} total)"
+    )
+
+    # Create indices mapping for the filtered corpus
+    title_to_original_idx = {m["Title"]: i for i, m in enumerate(metadata)}
+    filtered_indices = [title_to_original_idx[m["Title"]] for m in filtered_metadata]
+
+    # ---- Stage 4.1: Title resolution ----
+    drama = next(
+        (m for m in filtered_metadata if m["Title"].lower() == title.lower()), None
+    )
+
+    if not drama:
+        # Try fuzzy match only within filtered corpus
+        filtered_titles = [m["Title"] for m in filtered_metadata]
+        if filtered_titles:
+            match, score, _ = process.extractOne(
+                title, filtered_titles, scorer=fuzz.WRatio
+            )
+            if match and score >= 70:
+                drama = next(
+                    (m for m in filtered_metadata if m["Title"] == match), None
+                )
+                print(
+                    f"Fuzzy match: '{title}' -> '{match}' (confidence: {score:.1f}%)".encode(
+                        "utf-8", errors="replace"
+                    ).decode(
+                        "utf-8"
+                    )
+                )
+                query_text = f"{drama['Title']} {drama.get('Genre', '')} {drama.get('Description', '')} {drama.get('Cast', '')}"
+            else:
+                print(
+                    f"No close match found for '{title}', treating as free-text query."
+                )
+                query_text = title
+        else:
+            query_text = title
+    else:
+        query_text = f"{drama['Title']} {drama.get('Genre', '')} {drama.get('Description', '')} {drama.get('Cast', '')}"
+
+    # ---- Stage 4.2: FAISS Semantic Search on filtered corpus ----
+    query_emb = cached_encode(query_text)
+    # Search more broadly to ensure we get enough results
+    search_k = min(len(filtered_metadata) + 50, len(metadata))
+    D_all, I_all = index.search(query_emb, search_k)
+
+    # Filter FAISS results to only include filtered_metadata indices
+    faiss_results = [
+        (metadata[idx], float(score))
+        for idx, score in zip(I_all[0], D_all[0])
+        if idx < len(metadata) and idx in filtered_indices
+    ][
+        : top_n + 20
+    ]  # Take top results from filtered set
+
+    # ---- Stage 4.3: BM25 Lexical Search on filtered corpus ----
+    # Get BM25 scores for all dramas, then filter
+    bm25_scores_all = bm25.get_scores(query_text.split())
+    bm25_results = [
+        (metadata[idx], float(bm25_scores_all[idx])) for idx in filtered_indices
+    ]
+    bm25_results = sorted(bm25_results, key=lambda x: x[1], reverse=True)[: top_n + 20]
+
+    # ---- Stage 4.4: Combine Results ----
+    combined_scores = {}
+    max_bm25 = max([score for _, score in bm25_results]) if bm25_results else 1
+    if max_bm25 == 0:
+        max_bm25 = 1
+
+    for rec, score in faiss_results:
+        combined_scores[rec["Title"]] = alpha * score
+    for rec, score in bm25_results:
+        combined_scores[rec["Title"]] = combined_scores.get(rec["Title"], 0) + (
+            1 - alpha
+        ) * (score / max_bm25)
+
+    # Sort by combined score (filters already applied in Stage 4.0)
+    filtered = [
+        next(m for m in filtered_metadata if m["Title"] == t)
+        for t, _ in sorted(combined_scores.items(), key=lambda x: x[1], reverse=True)
+    ]
+
+    # Handle similar_to filter (requires FAISS search)
     if similar_to:
-        # Find dramas similar to a given title (semantic search)
+        # Find dramas similar to a given title within filtered metadata
         sim_drama = next(
-            (m for m in metadata if m["Title"].lower() == similar_to.lower()), None
+            (m for m in filtered_metadata if m["Title"].lower() == similar_to.lower()),
+            None,
         )
         if sim_drama:
             sim_query = f"{sim_drama['Title']} {sim_drama.get('Genre', '')} {sim_drama.get('Description', '')} {sim_drama.get('Cast', '')}"
             sim_emb = cached_encode(sim_query)
-            D_sim, I_sim = index.search(sim_emb, top_n + 10)
+            D_sim, I_sim = index.search(sim_emb, len(filtered_metadata) + 20)
+            # Only keep results that are in our filtered set
             sim_titles = [
-                metadata[idx]["Title"] for idx in I_sim[0] if idx < len(metadata)
+                metadata[idx]["Title"]
+                for idx in I_sim[0]
+                if idx < len(metadata) and idx in filtered_indices
             ]
             filtered = [r for r in filtered if r["Title"] in sim_titles]
+
     # Sorting
     if sort_by:
         reverse = sort_order == "desc"

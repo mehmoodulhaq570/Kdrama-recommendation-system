@@ -367,22 +367,41 @@ with tab1:
     # Example queries with better styling
     st.markdown("##### 💡 Quick Searches")
     example_col1, example_col2, example_col3, example_col4 = st.columns(4)
+
+    # Initialize session state for quick searches
+    if "quick_search_query" not in st.session_state:
+        st.session_state.quick_search_query = None
+    if "quick_search_genre" not in st.session_state:
+        st.session_state.quick_search_genre = None
+
     with example_col1:
         if st.button("💕 Crash Landing on You", use_container_width=True):
-            query = "Crash Landing on You"
-            search_button = True
+            st.session_state.quick_search_query = "Crash Landing on You"
+            st.session_state.quick_search_genre = None
     with example_col2:
         if st.button("🍜 Itaewon Class", use_container_width=True):
-            query = "Itaewon Class"
-            search_button = True
+            st.session_state.quick_search_query = "Itaewon Class"
+            st.session_state.quick_search_genre = None
     with example_col3:
         if st.button("😂 Romantic Comedy", use_container_width=True):
-            query = "romantic comedy"
-            search_button = True
+            st.session_state.quick_search_query = "romantic comedy"
+            st.session_state.quick_search_genre = "Romance"
     with example_col4:
         if st.button("🕰️ Historical Drama", use_container_width=True):
-            query = "historical drama"
-            search_button = True
+            st.session_state.quick_search_query = "historical"
+            st.session_state.quick_search_genre = "Historical"
+
+    # Use quick search values if available
+    if st.session_state.quick_search_query:
+        query = st.session_state.quick_search_query
+        if (
+            st.session_state.quick_search_genre and not genre
+        ):  # Only override if sidebar is empty
+            genre = st.session_state.quick_search_genre
+        search_button = True
+        # Clear after use
+        st.session_state.quick_search_query = None
+        st.session_state.quick_search_genre = None
 
     # Search results
     if query and search_button:
