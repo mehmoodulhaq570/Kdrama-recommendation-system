@@ -221,9 +221,20 @@ def log_interaction(drama_title: str, interaction_type: str, position: int = Non
             "interaction_type": interaction_type,
             "position": position,
         }
-        requests.post(f"{API_URL}/analytics/interaction", json=payload, timeout=2)
-    except Exception:
-        pass  # Silently fail - don't disrupt user experience
+        response = requests.post(
+            f"{API_URL}/analytics/interaction", json=payload, timeout=3
+        )
+        response.raise_for_status()  # Raise exception for bad status codes
+        return True
+    except requests.exceptions.Timeout:
+        st.warning("⚠️ Interaction tracking timed out (backend slow)")
+        return False
+    except requests.exceptions.ConnectionError:
+        st.error("❌ Cannot connect to backend for tracking")
+        return False
+    except Exception as e:
+        st.error(f"❌ Tracking error: {str(e)}")
+        return False
 
 
 def get_recommendations(query: str, top_n: int = 5, **filters) -> Dict:
@@ -237,17 +248,27 @@ def get_recommendations(query: str, top_n: int = 5, **filters) -> Dict:
         }
         params.update(filters)
 
-        response = requests.get(f"{API_URL}/recommend", params=params, timeout=10)
-        if response.status_code == 200:
-            result = response.json()
-            # Store search_id for interaction tracking
-            if "search_id" in result:
-                st.session_state.last_search_id = result["search_id"]
-            return result
-        else:
-            return {"error": f"API error: {response.status_code}"}
+        response = requests.get(f"{API_URL}/recommend", params=params, timeout=15)
+        response.raise_for_status()
+
+        result = response.json()
+        # Store search_id for interaction tracking
+        if "search_id" in result:
+            st.session_state.last_search_id = result["search_id"]
+        return result
+
+    except requests.exceptions.Timeout:
+        return {"error": "Request timed out. Backend is taking too long to respond."}
+    except requests.exceptions.ConnectionError:
+        return {
+            "error": "Cannot connect to backend. Make sure it's running on http://127.0.0.1:8001"
+        }
+    except requests.exceptions.HTTPError as e:
+        return {"error": f"HTTP Error {e.response.status_code}: {e.response.reason}"}
+    except requests.exceptions.JSONDecodeError:
+        return {"error": "Invalid response from backend (not JSON)"}
     except Exception as e:
-        return {"error": str(e)}
+        return {"error": f"Unexpected error: {str(e)}"}
 
 
 def format_drama_card(drama: Dict, rank: int) -> str:
@@ -396,7 +417,13 @@ st.markdown(
 
 # Search tabs
 tab1, tab2, tab3, tab4, tab5 = st.tabs(
-    ["🔍 Smart Search", "👤 My Profile", "📊 Statistics", "📈 Analytics", "ℹ️ How It Works"]
+    [
+        "🔍 Smart Search",
+        "👤 My Profile",
+        "📊 Statistics",
+        "📈 Analytics",
+        "ℹ️ How It Works",
+    ]
 )
 
 with tab1:
@@ -593,14 +620,16 @@ with tab2:
     st.markdown("### � My Profile")
     st.markdown(f"**User ID:** `{st.session_state.user_id}`")
     st.markdown(f"**Session ID:** `{st.session_state.session_id}`")
-    
+
     st.markdown("---")
-    
+
     # Watchlist Section
     st.markdown("### 📝 My Watchlist")
     if st.session_state.watchlist:
-        st.info(f"You have **{len(st.session_state.watchlist)}** dramas in your watchlist")
-        
+        st.info(
+            f"You have **{len(st.session_state.watchlist)}** dramas in your watchlist"
+        )
+
         for drama in st.session_state.watchlist:
             col_w1, col_w2, col_w3 = st.columns([4, 1, 1])
             with col_w1:
@@ -619,15 +648,19 @@ with tab2:
             st.markdown("---")
     else:
         st.warning("📭 Your watchlist is empty!")
-        st.info("💡 **Tip:** Search for dramas and click '➕ Watchlist' to save them here.")
-    
+        st.info(
+            "💡 **Tip:** Search for dramas and click '➕ Watchlist' to save them here."
+        )
+
     st.markdown("---")
-    
+
     # Viewed Dramas Section
     st.markdown("### 👁️ Recently Viewed")
     if st.session_state.viewed_dramas:
-        st.info(f"You have viewed **{len(st.session_state.viewed_dramas)}** dramas in this session")
-        
+        st.info(
+            f"You have viewed **{len(st.session_state.viewed_dramas)}** dramas in this session"
+        )
+
         for drama in st.session_state.viewed_dramas[:20]:  # Show last 20
             col_v1, col_v2, col_v3 = st.columns([4, 1, 1])
             with col_v1:
@@ -648,9 +681,9 @@ with tab2:
     else:
         st.warning("👁️ You haven't viewed any dramas yet!")
         st.info("💡 **Tip:** Search for dramas and click '👁️ View' to track them here.")
-    
+
     st.markdown("---")
-    
+
     # Clear buttons
     col_clear1, col_clear2 = st.columns(2)
     with col_clear1:
@@ -659,7 +692,9 @@ with tab2:
             st.toast("Watchlist cleared!", icon="ℹ️")
             st.rerun()
     with col_clear2:
-        if st.button("🗑️ Clear Viewed History", type="secondary", use_container_width=True):
+        if st.button(
+            "🗑️ Clear Viewed History", type="secondary", use_container_width=True
+        ):
             st.session_state.viewed_dramas.clear()
             st.toast("Viewed history cleared!", icon="ℹ️")
             st.rerun()

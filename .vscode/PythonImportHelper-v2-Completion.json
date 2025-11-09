@@ -1010,7 +1010,7 @@
         "kind": 5,
         "importPath": "backend.query_analyzer",
         "description": "backend.query_analyzer",
-        "peekOfCode": "INTENT_PATTERNS = {\n    QueryIntent.SIMILAR_TO: [\n        r\"(like|similar to|same as|reminds me of)\\s+(.+)\",\n        r\"(similar|like)\\s+\",\n        r\"more\\s+(of|like)\",\n    ],\n    QueryIntent.ACTOR_BASED: [\n        r\"(with|starring|featuring|by)\\s+([A-Z][a-z]+\\s+[A-Z][a-z]+)\",\n        r\"([A-Z][a-z]+\\s+[A-Z][a-z]+)\\s+(drama|series|show)\",\n    ],",
+        "peekOfCode": "INTENT_PATTERNS = {\n    QueryIntent.SIMILAR_TO: [\n        r\"(like|similar to|same as|reminds me of|something like)\\s+(.+)\",\n        r\"(similar|like)\\s+\",\n        r\"more\\s+(of|like)\",\n        r\"anything\\s+like\",\n        r\"shows?\\s+like\",\n    ],\n    QueryIntent.ACTOR_BASED: [\n        r\"(with|starring|featuring|by|acted by|cast)\\s+([A-Z][a-z]+(\\s+[A-Z][a-z]+)+)\",",
         "detail": "backend.query_analyzer",
         "documentation": {}
     },

@@ -49,48 +49,80 @@ SYNONYMS = {
     "good": ["great", "quality", "recommended", "popular"],
     "popular": ["trending", "famous", "well-known", "hit"],
     # Length
-    "short": ["mini series", "few episodes", "quick watch"],
-    "long": ["many episodes", "extended", "lengthy series"],
+    "short": ["mini series", "few episodes", "quick", "brief"],
+    "long": ["extended", "many episodes", "long-running"],
+    # K-Drama Specific Genres
+    "historical": ["period", "costume", "sageuk", "dynasty", "joseon"],
+    "fantasy": ["supernatural", "magical", "paranormal", "mystical"],
+    "mystery": ["detective", "crime", "whodunit", "investigation"],
+    "family": ["wholesome", "heartwarming", "slice of life", "warm"],
+    "office": ["workplace", "career", "business", "corporate"],
+    "school": ["youth", "high school", "college", "campus", "student"],
+    "medical": ["doctor", "hospital", "healthcare", "surgeon"],
+    "law": ["legal", "lawyer", "attorney", "court", "justice"],
+    "revenge": ["vengeance", "payback", "retribution", "grudge"],
+    "cooking": ["culinary", "chef", "food", "restaurant"],
+    "sports": ["athletic", "competition", "team", "game"],
+    "music": ["musical", "band", "singer", "idol", "k-pop"],
+    "zombie": ["apocalypse", "survival", "undead", "post-apocalyptic"],
+    # Common K-Drama themes
+    "time travel": ["time slip", "time loop", "temporal"],
+    "reincarnation": ["rebirth", "past life", "second chance"],
+    "chaebol": ["rich", "wealthy", "heir", "billionaire", "elite"],
 }
 
 
 # Intent detection patterns
 INTENT_PATTERNS = {
     QueryIntent.SIMILAR_TO: [
-        r"(like|similar to|same as|reminds me of)\s+(.+)",
+        r"(like|similar to|same as|reminds me of|something like)\s+(.+)",
         r"(similar|like)\s+",
         r"more\s+(of|like)",
+        r"anything\s+like",
+        r"shows?\s+like",
     ],
     QueryIntent.ACTOR_BASED: [
-        r"(with|starring|featuring|by)\s+([A-Z][a-z]+\s+[A-Z][a-z]+)",
-        r"([A-Z][a-z]+\s+[A-Z][a-z]+)\s+(drama|series|show)",
+        r"(with|starring|featuring|by|acted by|cast)\s+([A-Z][a-z]+(\s+[A-Z][a-z]+)+)",
+        r"([A-Z][a-z]+(\s+[A-Z][a-z]+)+)\s+(drama|series|show|kdrama|k-drama)",
+        r"(actor|actress|lead|main cast).*([A-Z][a-z]+)",
     ],
     QueryIntent.TOP_RATED: [
-        r"(best|top rated|highly rated|excellent|masterpiece)",
+        r"(best|top rated|highly rated|excellent|masterpiece|must watch|critically acclaimed)",
         r"(top|best)\s+\d+",
-        r"highest\s+rated",
+        r"(highest|most)\s+rated",
+        r"award[- ]winning",
+        r"(highly|most)\s+(recommended|popular|acclaimed)",
     ],
     QueryIntent.YEAR_BASED: [
         r"(20\d{2}|19\d{2})",  # Match years
-        r"(recent|new|latest|current|modern)",
+        r"(recent|new|latest|current|modern|fresh|ongoing)",
         r"from\s+(20\d{2})",
+        r"(this|last)\s+(year|season)",
+        r"20\d{2}.*drama",
     ],
     QueryIntent.EMOTION_BASED: [
-        r"(sad|funny|scary|happy|romantic|exciting|emotional|touching|heartwarming)",
-        r"(cry|laugh|smile|scared|romance)",
-        r"(feel good|tearjerker|lighthearted)",
+        r"(sad|funny|scary|happy|romantic|exciting|emotional|touching|heartwarming|hilarious|dark|intense)",
+        r"(cry|laugh|smile|scared|romance|suspense|thrill)",
+        r"(feel good|tearjerker|lighthearted|feel-good|uplifting|heartbreaking)",
+        r"(mood|feeling|vibe).*(?:sad|happy|romantic|exciting|dark)",
+        r"(romcom|rom-com|romantic comedy)",
     ],
     QueryIntent.CONSTRAINT_BASED: [
-        r"(short|long|quick|under|less than|more than)\s+\d*\s*(episode|ep)",
-        r"(mini series|limited series)",
+        r"(short|long|quick|under|less than|more than|around|approximately)\s+\d*\s*(episode|ep|episodes)",
+        r"(mini series|limited series|long series)",
+        r"\d+\s*(episode|ep)",
+        r"(binge|binge-watch|marathon)",
     ],
     QueryIntent.TRENDING: [
-        r"(trending|popular now|what's hot|viral|buzz)",
-        r"(everyone\s+watching|currently\s+watching)",
+        r"(trending|popular now|what's hot|viral|buzz|currently popular|most watched)",
+        r"(everyone\s+watching|currently\s+watching|people\s+watching)",
+        r"(right now|at the moment|these days)",
+        r"(hot|fire|blowing up)",
     ],
     QueryIntent.VAGUE: [
-        r"^(good|nice|great|something|any|recommend)(\s+drama)?$",
-        r"^(what\s+should\s+i\s+watch|suggest|recommend)$",
+        r"^(good|nice|great|something|any|recommend|suggest)(\s+(drama|kdrama|k-drama|show))?$",
+        r"^(what\s+should\s+i\s+watch|suggest|recommend|anything|any\s+drama)$",
+        r"^(drama|kdrama|k-drama|show)$",
     ],
 }
 
