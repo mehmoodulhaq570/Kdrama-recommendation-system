@@ -366,6 +366,22 @@
         "documentation": {}
     },
     {
+        "label": "QueryAnalyzer",
+        "importPath": "query_analyzer",
+        "description": "query_analyzer",
+        "isExtraImport": true,
+        "detail": "query_analyzer",
+        "documentation": {}
+    },
+    {
+        "label": "QueryAnalyzer",
+        "importPath": "query_analyzer",
+        "description": "query_analyzer",
+        "isExtraImport": true,
+        "detail": "query_analyzer",
+        "documentation": {}
+    },
+    {
         "label": "get_tracker",
         "importPath": "analytics",
         "description": "analytics",
@@ -804,6 +820,15 @@
         "importPath": "backend.app",
         "description": "backend.app",
         "peekOfCode": "def root():\n    return {\n        \"message\": \"SeoulMate Kdrama Recommendation API v4.0 (Phase 1) is running\",\n        \"features\": [\n            \"Query Intent Detection\",\n            \"Dynamic Weight Adjustment\",\n            \"Query Expansion with Synonyms\",\n            \"Click Tracking & Analytics\",\n            \"User Behavior Learning\",\n        ],",
+        "detail": "backend.app",
+        "documentation": {}
+    },
+    {
+        "label": "analyze_query",
+        "kind": 2,
+        "importPath": "backend.app",
+        "description": "backend.app",
+        "peekOfCode": "def analyze_query(query: str = Query(..., description=\"Query to analyze\")):\n    \"\"\"\n    Analyze a query to detect intent, genres, and other entities.\n    This is a lightweight endpoint for quick analysis without full recommendation.\n    \"\"\"\n    try:\n        analysis = query_analyzer.analyze(query)\n        return {\n            \"query\": query,\n            \"intent\": (",
         "detail": "backend.app",
         "documentation": {}
     },
@@ -1719,118 +1744,253 @@
     {
         "label": "historical_count",
         "kind": 5,
-        "importPath": "check_genres",
-        "description": "check_genres",
+        "importPath": "tests.check_genres",
+        "description": "tests.check_genres",
         "peekOfCode": "historical_count = 0\nfor m in meta:\n    genre_str = str(m.get(\"Genre\", \"\")) + str(m.get(\"genres\", \"\"))\n    if \"historical\" in genre_str.lower():\n        historical_count += 1\n        if historical_count <= 5:\n            print(f\"{historical_count}. {m['Title']}\")\n            print(f\"   Genre: {m.get('Genre', 'N/A')}\")\n            print(f\"   genres: {m.get('genres', 'N/A')}\")\n            print()",
-        "detail": "check_genres",
+        "detail": "tests.check_genres",
+        "documentation": {}
+    },
+    {
+        "label": "metadata_path",
+        "kind": 5,
+        "importPath": "tests.check_genres_2",
+        "description": "tests.check_genres_2",
+        "peekOfCode": "metadata_path = None\npossible_paths = [\n    \"../model_traning/faiss_index/meta.pkl\",\n    \"./meta.pkl\",\n    \"faiss_index/meta.pkl\",\n    \"d:/Projects/SeoulMate/model_traning/faiss_index/meta.pkl\",\n]\nfor path in possible_paths:\n    if os.path.exists(path):\n        metadata_path = path",
+        "detail": "tests.check_genres_2",
+        "documentation": {}
+    },
+    {
+        "label": "possible_paths",
+        "kind": 5,
+        "importPath": "tests.check_genres_2",
+        "description": "tests.check_genres_2",
+        "peekOfCode": "possible_paths = [\n    \"../model_traning/faiss_index/meta.pkl\",\n    \"./meta.pkl\",\n    \"faiss_index/meta.pkl\",\n    \"d:/Projects/SeoulMate/model_traning/faiss_index/meta.pkl\",\n]\nfor path in possible_paths:\n    if os.path.exists(path):\n        metadata_path = path\n        break",
+        "detail": "tests.check_genres_2",
+        "documentation": {}
+    },
+    {
+        "label": "medical_count",
+        "kind": 5,
+        "importPath": "tests.check_genres_2",
+        "description": "tests.check_genres_2",
+        "peekOfCode": "medical_count = 0\nfor drama in metadata:\n    title = drama.get(\"Title\", drama.get(\"title\", \"Unknown\"))\n    genre = str(drama.get(\"Genre\", drama.get(\"genres\", \"\")))\n    if (\n        \"medical\" in genre.lower()\n        or \"doctor\" in genre.lower()\n        or \"hospital\" in genre.lower()\n    ):\n        medical_count += 1",
+        "detail": "tests.check_genres_2",
         "documentation": {}
     },
     {
         "label": "API_URL",
         "kind": 5,
-        "importPath": "test_all_genres",
-        "description": "test_all_genres",
+        "importPath": "tests.test_all_genres",
+        "description": "tests.test_all_genres",
         "peekOfCode": "API_URL = \"http://127.0.0.1:8001\"\nprint(\"=\" * 80)\nprint(\"GENRE FILTER FIX - COMPREHENSIVE TEST\")\nprint(\"=\" * 80)\ntests = [\n    {\n        \"name\": \"TEST 1: Historical dramas (with genre filter)\",\n        \"params\": {\"title\": \"historical\", \"genre\": \"Historical\", \"top_n\": 5},\n        \"expected\": \"Should return ONLY historical dramas\",\n    },",
-        "detail": "test_all_genres",
+        "detail": "tests.test_all_genres",
         "documentation": {}
     },
     {
         "label": "tests",
         "kind": 5,
-        "importPath": "test_all_genres",
-        "description": "test_all_genres",
+        "importPath": "tests.test_all_genres",
+        "description": "tests.test_all_genres",
         "peekOfCode": "tests = [\n    {\n        \"name\": \"TEST 1: Historical dramas (with genre filter)\",\n        \"params\": {\"title\": \"historical\", \"genre\": \"Historical\", \"top_n\": 5},\n        \"expected\": \"Should return ONLY historical dramas\",\n    },\n    {\n        \"name\": \"TEST 2: Romance dramas (with genre filter)\",\n        \"params\": {\"title\": \"romance\", \"genre\": \"Romance\", \"top_n\": 5},\n        \"expected\": \"Should return ONLY romance dramas\",",
-        "detail": "test_all_genres",
+        "detail": "tests.test_all_genres",
+        "documentation": {}
+    },
+    {
+        "label": "analyzer",
+        "kind": 5,
+        "importPath": "tests.test_analysis",
+        "description": "tests.test_analysis",
+        "peekOfCode": "analyzer = QueryAnalyzer()\n# Test various medical queries\ntest_queries = [\n    \"medical drama\",\n    \"a medical drama\",\n    \"medical kdrama\",\n    \"medical korean drama\",\n    \"action thriller\",\n    \"historical drama\",\n    \"school romance\",",
+        "detail": "tests.test_analysis",
+        "documentation": {}
+    },
+    {
+        "label": "test_queries",
+        "kind": 5,
+        "importPath": "tests.test_analysis",
+        "description": "tests.test_analysis",
+        "peekOfCode": "test_queries = [\n    \"medical drama\",\n    \"a medical drama\",\n    \"medical kdrama\",\n    \"medical korean drama\",\n    \"action thriller\",\n    \"historical drama\",\n    \"school romance\",\n]\nprint(\"Testing Query Analysis:\")",
+        "detail": "tests.test_analysis",
         "documentation": {}
     },
     {
         "label": "test_api_health",
         "kind": 2,
-        "importPath": "test_api",
-        "description": "test_api",
+        "importPath": "tests.test_api",
+        "description": "tests.test_api",
         "peekOfCode": "def test_api_health():\n    \"\"\"Test if API is running\"\"\"\n    try:\n        response = requests.get(f\"{API_URL}/\")\n        print(\"✅ API Health Check:\", response.json())\n        return True\n    except Exception as e:\n        print(\"❌ API not reachable:\", str(e))\n        return False\ndef test_recommendation(title, top_n=5):",
-        "detail": "test_api",
+        "detail": "tests.test_api",
         "documentation": {}
     },
     {
         "label": "test_recommendation",
         "kind": 2,
-        "importPath": "test_api",
-        "description": "test_api",
+        "importPath": "tests.test_api",
+        "description": "tests.test_api",
         "peekOfCode": "def test_recommendation(title, top_n=5):\n    \"\"\"Test recommendation endpoint\"\"\"\n    print(f\"\\n🔍 Getting recommendations for: '{title}'\")\n    print(f\"   Requesting top {top_n} dramas...\\n\")\n    try:\n        response = requests.get(\n            f\"{API_URL}/recommend\", params={\"title\": title, \"top_n\": top_n}\n        )\n        if response.status_code == 200:\n            data = response.json()",
-        "detail": "test_api",
+        "detail": "tests.test_api",
         "documentation": {}
     },
     {
         "label": "run_tests",
         "kind": 2,
-        "importPath": "test_api",
-        "description": "test_api",
+        "importPath": "tests.test_api",
+        "description": "tests.test_api",
         "peekOfCode": "def run_tests():\n    \"\"\"Run all tests\"\"\"\n    print(\"=\" * 60)\n    print(\"🎬 SeoulMate K-Drama Recommendation API Test Suite\")\n    print(\"=\" * 60)\n    # Test 1: Health check\n    if not test_api_health():\n        print(\"\\n⚠️  Start the backend server first:\")\n        print(\"   cd d:\\\\Projects\\\\SeoulMate\\\\backend\")\n        print(\"   python app.py\")",
-        "detail": "test_api",
+        "detail": "tests.test_api",
         "documentation": {}
     },
     {
         "label": "API_URL",
         "kind": 5,
-        "importPath": "test_api",
-        "description": "test_api",
+        "importPath": "tests.test_api",
+        "description": "tests.test_api",
         "peekOfCode": "API_URL = \"http://127.0.0.1:8001\"\ndef test_api_health():\n    \"\"\"Test if API is running\"\"\"\n    try:\n        response = requests.get(f\"{API_URL}/\")\n        print(\"✅ API Health Check:\", response.json())\n        return True\n    except Exception as e:\n        print(\"❌ API not reachable:\", str(e))\n        return False",
-        "detail": "test_api",
+        "detail": "tests.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "API_URL",
+        "kind": 5,
+        "importPath": "tests.test_complete_flow",
+        "description": "tests.test_complete_flow",
+        "peekOfCode": "API_URL = \"http://127.0.0.1:8001\"\ntest_queries = [\n    \"medical drama\",\n    \"a medical drama\",\n    \"medical kdrama\",\n    \"historical drama\",\n    \"action thriller\",\n    \"school romance\",\n]\nprint(\"Testing Complete Flow: Analyze -> Detect Genre -> Filter\")",
+        "detail": "tests.test_complete_flow",
+        "documentation": {}
+    },
+    {
+        "label": "test_queries",
+        "kind": 5,
+        "importPath": "tests.test_complete_flow",
+        "description": "tests.test_complete_flow",
+        "peekOfCode": "test_queries = [\n    \"medical drama\",\n    \"a medical drama\",\n    \"medical kdrama\",\n    \"historical drama\",\n    \"action thriller\",\n    \"school romance\",\n]\nprint(\"Testing Complete Flow: Analyze -> Detect Genre -> Filter\")\nprint(\"=\" * 80)",
+        "detail": "tests.test_complete_flow",
+        "documentation": {}
+    },
+    {
+        "label": "metadata_path",
+        "kind": 5,
+        "importPath": "tests.test_filter",
+        "description": "tests.test_filter",
+        "peekOfCode": "metadata_path = \"../model_traning/faiss_index/meta.pkl\"\nwith open(metadata_path, \"rb\") as f:\n    metadata = pickle.load(f)\nprint(\"=\" * 80)\nprint(\"TESTING GENRE FILTER LOGIC\")\nprint(\"=\" * 80)\n# Test the filter logic used in app.py\ngenre_to_test = \"Medical\"\nprint(f\"\\nTesting filter for genre: '{genre_to_test}'\")\nprint(\"-\" * 80)",
+        "detail": "tests.test_filter",
+        "documentation": {}
+    },
+    {
+        "label": "genre_to_test",
+        "kind": 5,
+        "importPath": "tests.test_filter",
+        "description": "tests.test_filter",
+        "peekOfCode": "genre_to_test = \"Medical\"\nprint(f\"\\nTesting filter for genre: '{genre_to_test}'\")\nprint(\"-\" * 80)\nfiltered = [\n    r\n    for r in metadata\n    if genre_to_test.lower() in str(r.get(\"Genre\", \"\")).lower()\n    or genre_to_test.lower() in str(r.get(\"genres\", \"\")).lower()\n]\nprint(f\"✓ Found {len(filtered)} dramas with '{genre_to_test}' genre\")",
+        "detail": "tests.test_filter",
+        "documentation": {}
+    },
+    {
+        "label": "filtered",
+        "kind": 5,
+        "importPath": "tests.test_filter",
+        "description": "tests.test_filter",
+        "peekOfCode": "filtered = [\n    r\n    for r in metadata\n    if genre_to_test.lower() in str(r.get(\"Genre\", \"\")).lower()\n    or genre_to_test.lower() in str(r.get(\"genres\", \"\")).lower()\n]\nprint(f\"✓ Found {len(filtered)} dramas with '{genre_to_test}' genre\")\nprint(\"\\nFirst 10 results:\")\nfor i, drama in enumerate(filtered[:10], 1):\n    title = drama.get(\"Title\", \"Unknown\")",
+        "detail": "tests.test_filter",
+        "documentation": {}
+    },
+    {
+        "label": "query",
+        "kind": 5,
+        "importPath": "tests.test_filter",
+        "description": "tests.test_filter",
+        "peekOfCode": "query = \"medical drama\"\ndetected_genre = \"Medical\"  # This is what query_analyzer detects\nprint(f\"\\nUser searches: '{query}'\")\nprint(f\"Query analyzer detects genre: '{detected_genre}'\")\nprint(f\"Backend applies filter: genre.lower() in Genre.lower()\")\n# Apply the filter\nfiltered_metadata = [\n    r for r in metadata if detected_genre.lower() in str(r.get(\"Genre\", \"\")).lower()\n]\nprint(f\"\\n✓ Filter applied successfully\")",
+        "detail": "tests.test_filter",
+        "documentation": {}
+    },
+    {
+        "label": "detected_genre",
+        "kind": 5,
+        "importPath": "tests.test_filter",
+        "description": "tests.test_filter",
+        "peekOfCode": "detected_genre = \"Medical\"  # This is what query_analyzer detects\nprint(f\"\\nUser searches: '{query}'\")\nprint(f\"Query analyzer detects genre: '{detected_genre}'\")\nprint(f\"Backend applies filter: genre.lower() in Genre.lower()\")\n# Apply the filter\nfiltered_metadata = [\n    r for r in metadata if detected_genre.lower() in str(r.get(\"Genre\", \"\")).lower()\n]\nprint(f\"\\n✓ Filter applied successfully\")\nprint(f\"✓ Result: {len(filtered_metadata)} medical dramas found\")",
+        "detail": "tests.test_filter",
+        "documentation": {}
+    },
+    {
+        "label": "filtered_metadata",
+        "kind": 5,
+        "importPath": "tests.test_filter",
+        "description": "tests.test_filter",
+        "peekOfCode": "filtered_metadata = [\n    r for r in metadata if detected_genre.lower() in str(r.get(\"Genre\", \"\")).lower()\n]\nprint(f\"\\n✓ Filter applied successfully\")\nprint(f\"✓ Result: {len(filtered_metadata)} medical dramas found\")\nif len(filtered_metadata) > 0:\n    print(\"\\n✅ FILTER IS WORKING!\")\n    print(\"Top 5 results would be:\")\n    for i, drama in enumerate(filtered_metadata[:5], 1):\n        print(f\"  {i}. {drama.get('Title')}\")",
+        "detail": "tests.test_filter",
+        "documentation": {}
+    },
+    {
+        "label": "analyzer",
+        "kind": 5,
+        "importPath": "tests.test_genre_detection",
+        "description": "tests.test_genre_detection",
+        "peekOfCode": "analyzer = QueryAnalyzer()\n# Test queries\ntest_queries = [\n    \"medical drama\",\n    \"historical drama\",\n    \"action thriller\",\n    \"school drama\",\n    \"office romance\",\n    \"sports anime\",\n    \"medical series\",",
+        "detail": "tests.test_genre_detection",
+        "documentation": {}
+    },
+    {
+        "label": "test_queries",
+        "kind": 5,
+        "importPath": "tests.test_genre_detection",
+        "description": "tests.test_genre_detection",
+        "peekOfCode": "test_queries = [\n    \"medical drama\",\n    \"historical drama\",\n    \"action thriller\",\n    \"school drama\",\n    \"office romance\",\n    \"sports anime\",\n    \"medical series\",\n    \"historical period drama\",\n    \"romantic comedy\",",
+        "detail": "tests.test_genre_detection",
         "documentation": {}
     },
     {
         "label": "response",
         "kind": 5,
-        "importPath": "test_genre_filter",
-        "description": "test_genre_filter",
+        "importPath": "tests.test_genre_filter",
+        "description": "tests.test_genre_filter",
         "peekOfCode": "response = requests.get(\n    \"http://127.0.0.1:8001/recommend\",\n    params={\"title\": \"drama\", \"genre\": \"Historical\", \"top_n\": 5},\n)\nresults = response.json()\nprint(f\"\\nQuery: {results['query']}\")\nprint(f\"Filters: {results['filters']}\")\nprint(f\"\\nRecommendations ({len(results['recommendations'])}):\")\nfor i, rec in enumerate(results[\"recommendations\"], 1):\n    print(f\"\\n{i}. {rec['Title']}\")",
-        "detail": "test_genre_filter",
+        "detail": "tests.test_genre_filter",
         "documentation": {}
     },
     {
         "label": "results",
         "kind": 5,
-        "importPath": "test_genre_filter",
-        "description": "test_genre_filter",
+        "importPath": "tests.test_genre_filter",
+        "description": "tests.test_genre_filter",
         "peekOfCode": "results = response.json()\nprint(f\"\\nQuery: {results['query']}\")\nprint(f\"Filters: {results['filters']}\")\nprint(f\"\\nRecommendations ({len(results['recommendations'])}):\")\nfor i, rec in enumerate(results[\"recommendations\"], 1):\n    print(f\"\\n{i}. {rec['Title']}\")\n    print(f\"   Genre: {rec.get('Genre', 'N/A')}\")\n# Test 2: Just search \"historical drama\" without filter\nprint(\"\\n\" + \"=\" * 80)\nprint(\"TEST 2: Searching 'historical drama' WITHOUT genre filter (like the button)\")",
-        "detail": "test_genre_filter",
+        "detail": "tests.test_genre_filter",
         "documentation": {}
     },
     {
         "label": "response",
         "kind": 5,
-        "importPath": "test_genre_filter",
-        "description": "test_genre_filter",
+        "importPath": "tests.test_genre_filter",
+        "description": "tests.test_genre_filter",
         "peekOfCode": "response = requests.get(\n    \"http://127.0.0.1:8001/recommend\", params={\"title\": \"historical drama\", \"top_n\": 5}\n)\nresults = response.json()\nprint(f\"\\nQuery: {results['query']}\")\nprint(f\"Filters: {results['filters']}\")\nprint(f\"\\nRecommendations ({len(results['recommendations'])}):\")\nfor i, rec in enumerate(results[\"recommendations\"], 1):\n    print(f\"\\n{i}. {rec['Title']}\")\n    print(f\"   Genre: {rec.get('Genre', 'N/A')}\")",
-        "detail": "test_genre_filter",
+        "detail": "tests.test_genre_filter",
         "documentation": {}
     },
     {
         "label": "results",
         "kind": 5,
-        "importPath": "test_genre_filter",
-        "description": "test_genre_filter",
+        "importPath": "tests.test_genre_filter",
+        "description": "tests.test_genre_filter",
         "peekOfCode": "results = response.json()\nprint(f\"\\nQuery: {results['query']}\")\nprint(f\"Filters: {results['filters']}\")\nprint(f\"\\nRecommendations ({len(results['recommendations'])}):\")\nfor i, rec in enumerate(results[\"recommendations\"], 1):\n    print(f\"\\n{i}. {rec['Title']}\")\n    print(f\"   Genre: {rec.get('Genre', 'N/A')}\")",
-        "detail": "test_genre_filter",
+        "detail": "tests.test_genre_filter",
         "documentation": {}
     },
     {
         "label": "response",
         "kind": 5,
-        "importPath": "test_historical",
-        "description": "test_historical",
+        "importPath": "tests.test_historical",
+        "description": "tests.test_historical",
         "peekOfCode": "response = requests.get(\n    \"http://127.0.0.1:8001/recommend\",\n    params={\"title\": \"historical\", \"genre\": \"Historical\", \"top_n\": 5},\n)\nresults = response.json()\nprint(f\"\\nQuery: {results['query']}\")\nprint(f\"Filters: {results['filters']}\")\nprint(f\"\\nRecommendations ({len(results['recommendations'])}):\")\nfor i, rec in enumerate(results[\"recommendations\"], 1):\n    print(f\"\\n{i}. {rec['Title']}\")",
-        "detail": "test_historical",
+        "detail": "tests.test_historical",
         "documentation": {}
     },
     {
         "label": "results",
         "kind": 5,
-        "importPath": "test_historical",
-        "description": "test_historical",
+        "importPath": "tests.test_historical",
+        "description": "tests.test_historical",
         "peekOfCode": "results = response.json()\nprint(f\"\\nQuery: {results['query']}\")\nprint(f\"Filters: {results['filters']}\")\nprint(f\"\\nRecommendations ({len(results['recommendations'])}):\")\nfor i, rec in enumerate(results[\"recommendations\"], 1):\n    print(f\"\\n{i}. {rec['Title']}\")\n    print(f\"   Genre: {rec.get('Genre', 'N/A')}\")\n    print(f\"   Rating: {rec.get('rating_value', 'N/A')}\")",
-        "detail": "test_historical",
+        "detail": "tests.test_historical",
         "documentation": {}
     }
 ]

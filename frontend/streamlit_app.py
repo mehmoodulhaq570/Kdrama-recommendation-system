@@ -484,6 +484,31 @@ with tab1:
 
     # Search results
     if query and search_button:
+        # FIRST: Pre-analyze the query to detect genres BEFORE searching
+        if not genre:  # Only auto-detect if user hasn't manually set a genre
+            try:
+                # Use the query analyzer directly to detect genres
+                pre_analysis_response = requests.get(
+                    f"{API_URL}/analyze",
+                    params={"query": query},
+                    timeout=3,
+                )
+                if pre_analysis_response.status_code == 200:
+                    pre_results = pre_analysis_response.json()
+                    if (
+                        "entities" in pre_results
+                        and "genres" in pre_results["entities"]
+                    ):
+                        detected_genres = pre_results["entities"]["genres"]
+                        if detected_genres:
+                            genre = detected_genres[0]  # Use first detected genre
+                            st.info(
+                                f"🎯 Auto-detected genre: **{genre}** from your query"
+                            )
+            except Exception:
+                # If pre-analysis fails, continue without it (silent fail)
+                pass
+
         # Collect all filter params from sidebar
         filter_params = {
             "genre": genre,

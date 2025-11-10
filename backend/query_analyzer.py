@@ -192,6 +192,7 @@ class QueryAnalyzer:
         # Default to genre browse if contains common genres
         common_genres = [
             "romance",
+            "romantic",
             "action",
             "comedy",
             "thriller",
@@ -201,8 +202,21 @@ class QueryAnalyzer:
             "drama",
             "crime",
             "mystery",
+            "medical",
+            "law",
+            "legal",
+            "school",
+            "office",
+            "workplace",
+            "family",
+            "sports",
+            "music",
+            "cooking",
+            "revenge",
+            "zombie",
+            "sageuk",
         ]
-        if any(genre in query for genre in common_genres):
+        if any(genre in query.lower() for genre in common_genres):
             return QueryIntent.GENRE_BROWSE, 0.7
 
         # Fallback to vague
@@ -237,23 +251,61 @@ class QueryAnalyzer:
         year_pattern = r"\b(19\d{2}|20[0-2]\d)\b"
         entities["years"] = [int(y) for y in re.findall(year_pattern, query)]
 
-        # Extract genres
-        common_genres = [
-            "romance",
-            "action",
-            "comedy",
-            "thriller",
-            "historical",
-            "fantasy",
-            "horror",
-            "drama",
-            "crime",
-            "mystery",
-            "sci-fi",
-            "melodrama",
-            "slice of life",
-        ]
-        entities["genres"] = [g for g in common_genres if g in query.lower()]
+        # Extract genres (matching actual dataset genres)
+        # Map query terms to actual dataset genre names
+        genre_mapping = {
+            "romantic": "Romance",
+            "romance": "Romance",
+            "romcom": "Romance, Comedy",
+            "action": "Action",
+            "comedy": "Comedy",
+            "funny": "Comedy",
+            "thriller": "Thriller",
+            "mystery": "Mystery",
+            "detective": "Mystery",
+            "horror": "Horror",
+            "scary": "Horror",
+            "fantasy": "Fantasy",
+            "supernatural": "Supernatural",
+            "historical": "Historical",
+            "period": "Historical",
+            "sageuk": "Historical",
+            "melodrama": "Melodrama",
+            "sad": "Melodrama",
+            "family": "Family",
+            "youth": "Youth",
+            "school": "Youth",
+            "teen": "Youth",
+            "medical": "Medical",
+            "hospital": "Medical",
+            "doctor": "Medical",
+            "law": "Law",
+            "legal": "Law",
+            "lawyer": "Law",
+            "business": "Business",
+            "office": "Business",
+            "workplace": "Business",
+            "crime": "Crime",
+            "sports": "Sports",
+            "music": "Music",
+            "food": "Food",
+            "cooking": "Food",
+            "adventure": "Adventure",
+            "sci-fi": "Sci-Fi",
+            "scifi": "Sci-Fi",
+            "psychological": "Psychological",
+            "political": "Political",
+            "life": "Life",
+        }
+
+        query_lower = query.lower()
+        detected_genres = []
+
+        for term, genre in genre_mapping.items():
+            if term in query_lower:
+                detected_genres.append(genre)
+
+        entities["genres"] = list(set(detected_genres))  # Remove duplicates
 
         # Extract emotions
         emotions = [

@@ -461,6 +461,28 @@ def root():
     }
 
 
+@app.get("/analyze")
+def analyze_query(query: str = Query(..., description="Query to analyze")):
+    """
+    Analyze a query to detect intent, genres, and other entities.
+    This is a lightweight endpoint for quick analysis without full recommendation.
+    """
+    try:
+        analysis = query_analyzer.analyze(query)
+        return {
+            "query": query,
+            "intent": (
+                analysis["intent"].value
+                if hasattr(analysis["intent"], "value")
+                else str(analysis["intent"])
+            ),
+            "entities": analysis["entities"],
+            "confidence": analysis.get("confidence", 0.8),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
+
+
 @app.get("/recommend")
 def get_recommendations(
     title: str = Query(..., description="Kdrama title or user query"),
