@@ -273,7 +273,10 @@ def get_recommendations(query: str, top_n: int = 5, **filters) -> Dict:
 
 def format_drama_card(drama: Dict, rank: int) -> str:
     """Format drama data into interactive HTML card with click tracking"""
-    title = drama.get("Title", "Unknown")
+    import html
+
+    # Get raw values
+    title_raw = drama.get("Title", "Unknown")
     genre = drama.get("Genre", drama.get("genres", "N/A"))
     description = drama.get(
         "Description", drama.get("description", "No description available")
@@ -291,16 +294,50 @@ def format_drama_card(drama: Dict, rank: int) -> str:
     if isinstance(cast, str) and len(cast) > 100:
         cast = cast[:100] + "..."
 
+    # HTML escape to prevent breaking the HTML structure
+    title = html.escape(str(title_raw))
+    genre = html.escape(str(genre))
+    cast = html.escape(str(cast))
+    description = html.escape(str(description))
+
     # Check if personalized (Phase 2)
     personalized_score = drama.get("personalized_score")
     base_score = drama.get("base_score")
     boost_multiplier = drama.get("boost_multiplier", 1.0)
+    boost_details = drama.get("boost_details", {})
 
     # Add personalization badge if boosted significantly
     personalization_badge = ""
-    if boost_multiplier and boost_multiplier > 1.1:
+    boost_breakdown = ""
+
+    if boost_multiplier and boost_multiplier > 1.05:
         boost_percent = int((boost_multiplier - 1.0) * 100)
-        personalization_badge = f'<span style="background: #FFD93D; color: #1A1A2E; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.85rem; font-weight: 700; margin-left: 10px;">🎯 +{boost_percent}% Match</span>'
+
+        # Main badge
+        personalization_badge = f'<span style="background: linear-gradient(135deg, #FFD93D 0%, #FFA500 100%); color: #1A1A2E; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.85rem; font-weight: 700; margin-left: 10px; box-shadow: 0 2px 8px rgba(255, 217, 61, 0.4);">🎯 +{boost_percent}% Match</span>'
+
+        # Detailed breakdown (shown in card)
+        breakdown_items = []
+        if boost_details:
+            if boost_details.get("genre_boost", 0) > 0.05:
+                breakdown_items.append(
+                    f'<span style="background: rgba(102, 126, 234, 0.2); padding: 0.2rem 0.6rem; border-radius: 10px; font-size: 0.8rem; margin-right: 5px;">🎭 Genre Match</span>'
+                )
+            if boost_details.get("actor_boost", 0) > 0.05:
+                breakdown_items.append(
+                    f'<span style="background: rgba(255, 193, 7, 0.2); padding: 0.2rem 0.6rem; border-radius: 10px; font-size: 0.8rem; margin-right: 5px;">⭐ Actor Match</span>'
+                )
+            if boost_details.get("director_boost", 0) > 0.05:
+                breakdown_items.append(
+                    f'<span style="background: rgba(76, 175, 80, 0.2); padding: 0.2rem 0.6rem; border-radius: 10px; font-size: 0.8rem; margin-right: 5px;">🎬 Director Match</span>'
+                )
+            if boost_details.get("theme_boost", 0) > 0.05:
+                breakdown_items.append(
+                    f'<span style="background: rgba(156, 39, 176, 0.2); padding: 0.2rem 0.6rem; border-radius: 10px; font-size: 0.8rem; margin-right: 5px;">💡 Theme Match</span>'
+                )
+
+        if breakdown_items:
+            boost_breakdown = f'<div style="margin-top: 0.8rem; margin-bottom: 0.5rem;">{" ".join(breakdown_items)}</div>'
 
     card_html = f"""
     <div class="drama-card" id="drama-card-{rank}">
@@ -309,6 +346,7 @@ def format_drama_card(drama: Dict, rank: int) -> str:
             <span>{title}</span>
             {personalization_badge}
         </div>
+        {boost_breakdown}
         <div class="drama-info">
             <strong>🎭 Genre:</strong> {genre}<br>
             <strong>⭐ Rating:</strong> {rating} | <strong>📺 Episodes:</strong> {episodes}<br>
@@ -320,7 +358,7 @@ def format_drama_card(drama: Dict, rank: int) -> str:
     </div>
     """
 
-    return card_html, title, rank
+    return card_html, title_raw, rank
 
 
 # ======================================================
@@ -627,10 +665,63 @@ with tab1:
 
                 # Display results with interactive buttons
                 for idx, drama in enumerate(recommendations, 1):
-                    card_html, title, rank = format_drama_card(drama, idx)
+                    # Extract drama data
+                    title = drama.get("Title", "Unknown")
+                    genre = drama.get("Genre", drama.get("genres", "N/A"))
+                    description = drama.get(
+                        "Description",
+                        drama.get("description", "No description available"),
+                    )
+                    if len(description) > 250:
+                        description = description[:250] + "..."
 
-                    # Display card
+                    cast = drama.get("Cast", drama.get("actors", "N/A"))
+                    if isinstance(cast, str) and len(cast) > 100:
+                        cast = cast[:100] + "..."
+
+                    rating = drama.get("rating_value", drama.get("score", "N/A"))
+                    episodes = drama.get("episodes", drama.get("Episodes", "N/A"))
+
+                    # Check personalization
+                    boost_multiplier = drama.get("boost_multiplier", 1.0)
+                    boost_details = drama.get("boost_details", {})
+
+                    # Build match badge
+                    match_badge_text = ""
+                    if boost_multiplier > 1.05:
+                        match_badge_text = (
+                            f" 🎯 +{int((boost_multiplier - 1.0) * 100)}% Match"
+                        )
+
+                    # Build boost badges
+                    boost_badges_text = ""
+                    if boost_multiplier > 1.05 and boost_details:
+                        badges = []
+                        if boost_details.get("genre_boost", 0) > 0.05:
+                            badges.append("🎭 Genre Match")
+                        if boost_details.get("actor_boost", 0) > 0.05:
+                            badges.append("⭐ Actor Match")
+                        if boost_details.get("director_boost", 0) > 0.05:
+                            badges.append("🎬 Director Match")
+                        if boost_details.get("theme_boost", 0) > 0.05:
+                            badges.append("💡 Theme Match")
+                        if badges:
+                            boost_badges_text = " | ".join(badges)
+
+                    # Create complete card with text content
+                    card_html = f"""
+<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 2rem; margin: 1.5rem 0; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3); color: white;">
+<div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">#{idx} {title}{match_badge_text}</div>
+{f'<div style="background: rgba(255,255,255,0.2); padding: 0.5rem; border-radius: 10px; margin-bottom: 1rem;">{boost_badges_text}</div>' if boost_badges_text else ''}
+<div style="margin-bottom: 0.8rem;"><strong>🎭 Genre:</strong> {genre}</div>
+<div style="margin-bottom: 0.8rem;"><strong>⭐ Rating:</strong> {rating}/10 | <strong>📺 Episodes:</strong> {episodes}</div>
+<div style="margin-bottom: 0.8rem;"><strong>🎬 Cast:</strong> {cast}</div>
+<div style="margin-bottom: 1rem; line-height: 1.6;"><strong>📖 Synopsis:</strong> {description}</div>
+<div><span style="background: #FFD93D; color: #1A1A2E; padding: 0.5rem 1rem; border-radius: 25px; font-weight: 700;">⭐ {rating}/10</span></div>
+</div>
+"""
                     st.markdown(card_html, unsafe_allow_html=True)
+                    st.divider()
 
                     # Interactive buttons below each card
                     btn_col1, btn_col2, btn_col3, btn_col4 = st.columns([1, 1, 1, 3])

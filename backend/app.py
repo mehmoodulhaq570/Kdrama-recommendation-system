@@ -722,6 +722,20 @@ def get_user_profile(user_id: str):
         top_directors = profile_manager.get_top_preferences(user_id, "directors", n=5)
         top_themes = profile_manager.get_top_preferences(user_id, "themes", n=10)
 
+        # Convert datetime strings to ensure JSON serialization
+        import datetime
+
+        def serialize_datetime(obj):
+            if isinstance(obj, datetime.datetime):
+                return obj.isoformat()
+            return obj
+
+        # Ensure all datetime fields are serialized
+        if "created_at" in user_profile:
+            user_profile["created_at"] = str(user_profile["created_at"])
+        if "last_updated" in user_profile:
+            user_profile["last_updated"] = str(user_profile["last_updated"])
+
         return {
             "user_id": user_id,
             "profile": user_profile,
@@ -735,6 +749,10 @@ def get_user_profile(user_id: str):
             "statistics": user_profile.get("statistics", {}),
         }
     except Exception as e:
+        # Log the full error for debugging
+        import traceback
+
+        print(f"ERROR in get_user_profile: {traceback.format_exc()}")
         raise HTTPException(
             status_code=500, detail=f"Failed to get user profile: {str(e)}"
         )
