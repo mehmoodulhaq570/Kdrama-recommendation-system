@@ -1,0 +1,56 @@
+{
+  "user_id": "test_thriller_fan",
+  "created_at": "2025-11-10T16:09:03.910124",
+  "last_updated": "2025-11-10T16:09:03.936563",
+  "preferences": {
+    "genres": {
+      "Thriller": 0.6800000000000002,
+      "Mystery": 0.6800000000000002,
+      "Crime": 0.6000000000000001,
+      "Legal": 0.6000000000000001
+    },
+    "actors": {
+      "Lee Je-hoon": 0.6000000000000001,
+      "Kim Hye-soo": 0.6000000000000001,
+      "Cho Seung-woo": 0.6000000000000001,
+      "Bae Doona": 0.6000000000000001
+    },
+    "directors": {
+      "Kim Won-seok": 0.6800000000000002
+    },
+    "themes": {
+      "suspense": 0.6800000000000002,
+      "mystery": 0.6800000000000002,
+      "crime": 0.6800000000000002,
+      "thriller": 0.6800000000000002
+    },
+    "publishers": {}
+  },
+  "statistics": {
+    "total_interactions": 2,
+    "total_clicks": 0,
+    "total_watchlist_adds": 0,
+    "total_watched": 2,
+    "avg_rating": 5.0,
+    "total_ratings": 2,
+    "rating_style": "generous"
+  },
+  "viewing_patterns": {
+    "preferred_episode_count": 16,
+    "preferred_years": [],
+    "binge_watcher": false,
+    "rating_style": "neutral"
+  },
+  "recent_interactions": [
+    {
+      "drama_title": "Stranger",
+      "interaction_type": "watched",
+      "timestamp": "2025-11-10T16:09:03.936497"
+    },
+    {
+      "drama_title": "Signal",
+      "interaction_type": "watched",
+      "timestamp": "2025-11-10T16:09:03.910251"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "user_id": "medical_fan",
+  "created_at": "2025-11-10T16:21:42.567849",
+  "last_updated": "2025-11-10T16:21:42.589936",
+  "preferences": {
+    "genres": {
+      "Medical": 0.6800000000000002,
+      "Life": 0.6000000000000001
+    },
+    "actors": {
+      "Jo Jung-suk": 0.6000000000000001,
+      "Yoo Yeon-seok": 0.6000000000000001,
+      "Joo Won": 0.6000000000000001,
+      "Moon Chae-won": 0.6000000000000001
+    },
+    "directors": {
+      "Shin Won-ho": 0.6000000000000001,
+      "Ki Min-soo": 0.6000000000000001
+    },
+    "themes": {},
+    "publishers": {}
+  },
+  "statistics": {
+    "total_interactions": 2,
+    "total_clicks": 0,
+    "total_watchlist_adds": 0,
+    "total_watched": 2,
+    "avg_rating": 5.0,
+    "total_ratings": 2,
+    "rating_style": "generous"
+  },
+  "viewing_patterns": {
+    "preferred_episode_count": null,
+    "preferred_years": [],
+    "binge_watcher": false,
+    "rating_style": "neutral"
+  },
+  "recent_interactions": [
+    {
+      "drama_title": "Good Doctor",
+      "interaction_type": "watched",
+      "timestamp": "2025-11-10T16:21:42.589895"
+    },
+    {
+      "drama_title": "Hospital Playlist",
+      "interaction_type": "watched",
+      "timestamp": "2025-11-10T16:21:42.568023"
+    }
+  ]
+}

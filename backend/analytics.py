@@ -103,7 +103,7 @@ class AnalyticsTracker:
             search_id: Related search ID (if from search results)
             position: Position in search results (1-indexed)
             session_id: Session identifier
-            metadata: Additional metadata
+            metadata: Additional metadata (should include drama data for profile updates)
         """
         interaction_data = {
             "user_id": user_id,
@@ -122,6 +122,33 @@ class AnalyticsTracker:
 
         # Update user stats
         self._update_user_stats(user_id, drama_title, action)
+
+        # Update user profile (Phase 2 - NEW!)
+        if metadata and "drama_data" in metadata:
+            try:
+                from user_profile import get_profile_manager
+
+                profile_manager = get_profile_manager()
+
+                # Map action types
+                interaction_type = action
+                if action == "view_details":
+                    interaction_type = "click"
+                elif action == "rating":
+                    interaction_type = "watched"
+
+                # Get rating if provided
+                rating = metadata.get("rating")
+
+                # Update profile
+                profile_manager.update_from_interaction(
+                    user_id=user_id,
+                    drama_data=metadata["drama_data"],
+                    interaction_type=interaction_type,
+                    rating=rating,
+                )
+            except Exception as e:
+                print(f"Warning: Failed to update user profile: {e}")
 
     def _update_user_stats(self, user_id: str, drama_title: str, action: str):
         """Update aggregated user statistics"""

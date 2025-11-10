@@ -11,10 +11,15 @@ from rapidfuzz import process, fuzz
 from functools import lru_cache
 from rank_bm25 import BM25Plus
 import uuid
+import time
 
 # Import Phase 1 enhancements
 from query_analyzer import QueryAnalyzer, get_search_strategy
 from analytics import get_tracker
+
+# Import Phase 2 enhancements
+from user_profile import get_profile_manager
+from personalization import get_personalization_engine
 
 # ======================================================
 # CONFIGURATION
@@ -394,6 +399,51 @@ def recommend(
         except Exception as e:
             print(f"Reranking failed: {e}")
 
+    # ---- Stage 4.6: PERSONALIZATION (Phase 2 - NEW!) ----
+    personalization_info = None
+    if user_id:
+        try:
+            # Load user profile
+            profile_manager = get_profile_manager()
+            user_profile = profile_manager.load_profile(user_id)
+
+            # Apply personalized weighting
+            personalization_engine = get_personalization_engine()
+
+            # Adjust alpha based on user preferences (explore vs exploit)
+            personalized_alpha = personalization_engine.calculate_user_specific_alpha(
+                user_profile, alpha
+            )
+
+            # Apply personalized boosting to results
+            top_results = personalization_engine.personalize_results(
+                top_results, user_profile, apply_boosting=True
+            )
+
+            print(
+                f"🎯 Personalization Applied: Alpha {alpha:.2f} → {personalized_alpha:.2f}"
+            )
+            print(f"   Boosted based on user preferences")
+
+            # Prepare personalization info for frontend
+            personalization_info = {
+                "applied": True,
+                "alpha_adjusted": abs(personalized_alpha - alpha) > 0.01,
+                "original_alpha": alpha,
+                "personalized_alpha": personalized_alpha,
+                "top_genres": user_profile.get("preferences", {}).get("genres", {}),
+                "top_actors": user_profile.get("preferences", {}).get("actors", {}),
+                "persona": user_profile.get("persona", []),
+                "total_interactions": user_profile.get("statistics", {}).get(
+                    "total_interactions", 0
+                ),
+            }
+
+        except Exception as e:
+            print(f"Warning: Personalization failed: {e}")
+            # Continue with non-personalized results
+            personalization_info = {"applied": False, "error": str(e)}
+
     # ---- Stage 4.7: Analytics Logging (Phase 1) ----
     result_titles = [r["Title"] for r in top_results]
 
@@ -418,7 +468,8 @@ def recommend(
         except Exception as e:
             print(f"Warning: Analytics logging failed: {e}")
 
-    return {
+    # Build response with personalization info
+    response = {
         "query": {"Title": title, "expanded": expanded_query},
         "analysis": {
             "intent": intent.value,
@@ -442,6 +493,12 @@ def recommend(
         "recommendations": top_results,
     }
 
+    # Add personalization info if available
+    if personalization_info:
+        response["personalization"] = personalization_info
+
+    return response
+
 
 # ======================================================
 # STAGE 5 — API ROUTES
@@ -449,13 +506,20 @@ def recommend(
 @app.get("/")
 def root():
     return {
-        "message": "SeoulMate Kdrama Recommendation API v4.0 (Phase 1) is running",
-        "features": [
+        "message": "SeoulMate Kdrama Recommendation API v4.0 Phase 2 is running",
+        "phase_1_features": [
             "Query Intent Detection",
             "Dynamic Weight Adjustment",
             "Query Expansion with Synonyms",
             "Click Tracking & Analytics",
-            "User Behavior Learning",
+            "Auto-Genre Detection",
+        ],
+        "phase_2_features": [
+            "User Preference Learning",
+            "Personalized Weighting (Genre, Actor, Director, Theme)",
+            "User Taste Profiles",
+            "Dynamic Alpha Adjustment",
+            "Interaction-based Learning",
         ],
         "docs": "/docs",
     }
@@ -630,6 +694,140 @@ def get_analytics_summary(
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"Failed to get analytics summary: {str(e)}"
+        )
+
+
+# ======================================================
+# USER PROFILE ENDPOINTS (Phase 2)
+# ======================================================
+@app.get("/profile/{user_id}", tags=["Personalization"])
+def get_user_profile(user_id: str):
+    """
+    Get user's taste profile with preferences and statistics
+
+    Returns:
+    - Genre preferences with scores
+    - Favorite actors and directors
+    - Viewing patterns
+    - User persona labels
+    - Interaction statistics
+    """
+    try:
+        profile_manager = get_profile_manager()
+        user_profile = profile_manager.load_profile(user_id)
+
+        # Get top preferences for easier consumption
+        top_genres = profile_manager.get_top_preferences(user_id, "genres", n=10)
+        top_actors = profile_manager.get_top_preferences(user_id, "actors", n=10)
+        top_directors = profile_manager.get_top_preferences(user_id, "directors", n=5)
+        top_themes = profile_manager.get_top_preferences(user_id, "themes", n=10)
+
+        return {
+            "user_id": user_id,
+            "profile": user_profile,
+            "top_preferences": {
+                "genres": top_genres,
+                "actors": top_actors,
+                "directors": top_directors,
+                "themes": top_themes,
+            },
+            "persona": user_profile.get("persona", []),
+            "statistics": user_profile.get("statistics", {}),
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Failed to get user profile: {str(e)}"
+        )
+
+
+@app.post("/profile/{user_id}/rate", tags=["Personalization"])
+def rate_drama(
+    user_id: str,
+    drama_title: str = Query(..., description="Title of the drama to rate"),
+    rating: float = Query(..., ge=0.0, le=10.0, description="Rating from 0-10"),
+):
+    """
+    Rate a drama and update user preferences
+
+    This will:
+    - Update user's genre preferences
+    - Update actor/director preferences
+    - Adjust user's taste profile
+    - Log the rating for analytics
+    """
+    try:
+        # Find the drama in the metadata
+        drama_data = None
+        for drama in metadata:
+            if drama.get("Title", "").lower() == drama_title.lower():
+                drama_data = drama
+                break
+
+        if not drama_data:
+            raise HTTPException(
+                status_code=404, detail=f"Drama '{drama_title}' not found"
+            )
+
+        # Update user profile
+        profile_manager = get_profile_manager()
+        profile_manager.update_from_interaction(
+            user_id=user_id,
+            drama_data=drama_data,
+            interaction_type="watched",
+            rating=rating,
+        )
+
+        # Also log to analytics
+        analytics_tracker.log_interaction(
+            user_id=user_id,
+            session_id=f"rating_{time.time()}",
+            search_id=None,
+            drama_title=drama_title,
+            interaction_type="rating",
+            position=None,
+            rating=rating,
+            metadata={"drama_data": drama_data},
+        )
+
+        return {
+            "success": True,
+            "message": f"Rating recorded: {drama_title} = {rating}/10",
+            "user_id": user_id,
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to rate drama: {str(e)}")
+
+
+@app.delete("/profile/{user_id}", tags=["Personalization"])
+def reset_user_profile(user_id: str):
+    """
+    Reset a user's profile (clear all preferences)
+
+    Use this to:
+    - Start fresh with recommendations
+    - Clear test data
+    - Reset after major preference changes
+    """
+    try:
+        profile_manager = get_profile_manager()
+        profile_path = profile_manager.profiles_dir / f"{user_id}.json"
+
+        if profile_path.exists():
+            profile_path.unlink()
+            return {
+                "success": True,
+                "message": f"Profile reset for user {user_id}",
+            }
+        else:
+            return {
+                "success": True,
+                "message": f"No profile found for user {user_id} (nothing to reset)",
+            }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Failed to reset profile: {str(e)}"
         )
 
 

@@ -291,11 +291,23 @@ def format_drama_card(drama: Dict, rank: int) -> str:
     if isinstance(cast, str) and len(cast) > 100:
         cast = cast[:100] + "..."
 
+    # Check if personalized (Phase 2)
+    personalized_score = drama.get("personalized_score")
+    base_score = drama.get("base_score")
+    boost_multiplier = drama.get("boost_multiplier", 1.0)
+
+    # Add personalization badge if boosted significantly
+    personalization_badge = ""
+    if boost_multiplier and boost_multiplier > 1.1:
+        boost_percent = int((boost_multiplier - 1.0) * 100)
+        personalization_badge = f'<span style="background: #FFD93D; color: #1A1A2E; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.85rem; font-weight: 700; margin-left: 10px;">🎯 +{boost_percent}% Match</span>'
+
     card_html = f"""
     <div class="drama-card" id="drama-card-{rank}">
         <div class="drama-title">
             <span class="rank-badge">#{rank}</span>
             <span>{title}</span>
+            {personalization_badge}
         </div>
         <div class="drama-info">
             <strong>🎭 Genre:</strong> {genre}<br>
@@ -571,6 +583,37 @@ with tab1:
                     with col_c:
                         st.info(f"👤 **User ID:** {st.session_state.user_id[:12]}...")
 
+                # Show personalization info (Phase 2)
+                if "personalization" in results:
+                    personalization = results["personalization"]
+                    if personalization.get("applied", False):
+                        st.success(
+                            "✨ **Personalized Results!** These recommendations are tailored to your taste profile."
+                        )
+
+                        # Show what was personalized
+                        if personalization.get("alpha_adjusted", False):
+                            orig_alpha = personalization.get("original_alpha", 0.7)
+                            pers_alpha = personalization.get("personalized_alpha", 0.7)
+                            st.info(
+                                f"🎯 **Alpha Adjusted:** {orig_alpha:.2f} → {pers_alpha:.2f} based on your viewing patterns"
+                            )
+
+                        # Show top preferences used
+                        top_genres = personalization.get("top_genres", {})
+                        if top_genres:
+                            top_3_genres = sorted(
+                                top_genres.items(), key=lambda x: x[1], reverse=True
+                            )[:3]
+                            genre_names = [g[0] for g in top_3_genres]
+                            st.info(
+                                f"💡 **Boosted based on your preferences:** {', '.join(genre_names)}"
+                            )
+
+                        persona = personalization.get("persona", [])
+                        if persona:
+                            st.info(f"🎭 **Your Persona:** {' • '.join(persona)}")
+
                 # Display active filters
                 active_filters = [
                     f"**{k.replace('_', ' ').title()}:** {v}"
@@ -642,9 +685,166 @@ with tab1:
                 )
 
 with tab2:
-    st.markdown("### � My Profile")
+    st.markdown("### 👤 My Profile")
     st.markdown(f"**User ID:** `{st.session_state.user_id}`")
     st.markdown(f"**Session ID:** `{st.session_state.session_id}`")
+
+    st.markdown("---")
+
+    # ======================================================
+    # PERSONALIZATION SECTION (Phase 2)
+    # ======================================================
+    st.markdown("### 🎯 Your Taste Profile")
+
+    try:
+        # Fetch user profile from backend
+        profile_response = requests.get(
+            f"{API_URL}/profile/{st.session_state.user_id}", timeout=5
+        )
+
+        if profile_response.status_code == 200:
+            profile_data = profile_response.json()
+            top_prefs = profile_data.get("top_preferences", {})
+            persona = profile_data.get("persona", [])
+            stats = profile_data.get("statistics", {})
+
+            # Show persona labels
+            if persona:
+                st.success("🎭 **Your Persona:** " + " • ".join(persona))
+
+            # Show statistics
+            total_interactions = stats.get("total_interactions", 0)
+            if total_interactions > 0:
+                col_stat1, col_stat2, col_stat3 = st.columns(3)
+                with col_stat1:
+                    st.metric("🎬 Watched", stats.get("watched", 0))
+                with col_stat2:
+                    st.metric("📋 Watchlist Adds", stats.get("watchlist_adds", 0))
+                with col_stat3:
+                    st.metric("👆 Clicks", stats.get("clicks", 0))
+
+                st.markdown("---")
+
+                # Show top genres
+                top_genres = top_prefs.get("genres", [])
+                if top_genres:
+                    st.markdown("#### 🎭 Your Favorite Genres")
+                    for genre, score in top_genres[:5]:
+                        percentage = int(score * 100)
+                        st.progress(score, text=f"**{genre}** - {percentage}% match")
+
+                # Show top actors
+                top_actors = top_prefs.get("actors", [])
+                if top_actors:
+                    st.markdown("#### ⭐ Your Favorite Actors")
+                    actor_names = [actor for actor, _ in top_actors[:10]]
+                    st.info(", ".join(actor_names))
+
+                # Show top directors
+                top_directors = top_prefs.get("directors", [])
+                if top_directors:
+                    st.markdown("#### 🎬 Your Favorite Directors")
+                    director_names = [director for director, _ in top_directors[:5]]
+                    st.info(", ".join(director_names))
+
+                # Show top themes
+                top_themes = top_prefs.get("themes", [])
+                if top_themes:
+                    st.markdown("#### 💡 Your Favorite Themes")
+                    theme_names = [theme for theme, _ in top_themes[:8]]
+                    st.info(", ".join(theme_names))
+
+                st.markdown("---")
+
+                # Reset profile button
+                if st.button(
+                    "🔄 Reset My Profile",
+                    type="secondary",
+                    help="Clear all preferences and start fresh",
+                ):
+                    try:
+                        reset_response = requests.delete(
+                            f"{API_URL}/profile/{st.session_state.user_id}", timeout=3
+                        )
+                        if reset_response.status_code == 200:
+                            st.success("✅ Profile reset successfully!")
+                            st.rerun()
+                        else:
+                            st.error("❌ Failed to reset profile")
+                    except Exception as e:
+                        st.error(f"❌ Error: {str(e)}")
+            else:
+                st.info("📊 **Build Your Taste Profile!**")
+                st.markdown(
+                    """
+                Your taste profile is empty. Start interacting with dramas to build your personalized profile:
+                
+                - 🔍 **Search** for dramas you like
+                - 👁️ **View** drama details to show interest
+                - ➕ **Add to Watchlist** for future viewing
+                - ⭐ **Rate dramas** below to train your preferences
+                
+                The more you interact, the better your recommendations become!
+                """
+                )
+        else:
+            st.warning("⚠️ Could not load profile data")
+
+    except Exception as e:
+        st.warning(f"⚠️ Profile feature unavailable: {str(e)}")
+
+    st.markdown("---")
+
+    # ======================================================
+    # RATE DRAMAS SECTION (Phase 2)
+    # ======================================================
+    st.markdown("### ⭐ Rate Dramas to Improve Recommendations")
+
+    with st.expander("📝 Rate a Drama", expanded=False):
+        st.markdown("Rate dramas you've watched to build your taste profile!")
+
+        rate_drama_title = st.text_input(
+            "Drama Title",
+            placeholder="Enter exact drama title...",
+            key="rate_drama_input",
+        )
+
+        rate_value = st.slider(
+            "Your Rating",
+            min_value=0.0,
+            max_value=10.0,
+            value=8.0,
+            step=0.5,
+            help="Rate from 0 (terrible) to 10 (masterpiece)",
+        )
+
+        if st.button("Submit Rating", type="primary"):
+            if rate_drama_title:
+                try:
+                    rate_response = requests.post(
+                        f"{API_URL}/profile/{st.session_state.user_id}/rate",
+                        params={"drama_title": rate_drama_title, "rating": rate_value},
+                        timeout=5,
+                    )
+
+                    if rate_response.status_code == 200:
+                        result = rate_response.json()
+                        st.success(f"✅ {result['message']}")
+                        st.balloons()
+                        st.info(
+                            "💡 Your taste profile has been updated! Search again to see personalized recommendations."
+                        )
+                    elif rate_response.status_code == 404:
+                        st.error(
+                            f"❌ Drama '{rate_drama_title}' not found. Please check the spelling."
+                        )
+                    else:
+                        st.error("❌ Failed to submit rating")
+
+                except Exception as e:
+                    st.error(f"❌ Error submitting rating: {str(e)}")
+            else:
+                st.warning("⚠️ Please enter a drama title")
 
     st.markdown("---")
 
@@ -733,11 +933,11 @@ with tab3:
     with col2:
         st.metric(
             "🤖 AI Model",
-            "v4.0 Phase 1",
-            help="Latest recommendation engine with query intelligence",
+            "v4.0 Phase 2",
+            help="Latest recommendation engine with personalization",
         )
     with col3:
-        st.metric("🎯 Accuracy", "Fine-tuned", help="Trained on 1,922 dramas")
+        st.metric("🎯 Personalized", "Yes", help="Tailored to your taste")
     with col4:
         st.metric("⚡ Speed", "< 1s", help="Average response time")
 
@@ -769,6 +969,12 @@ with tab3:
           - Dynamic weight adjustment
           - Query expansion with synonyms
           - Click tracking & analytics
+        
+        - **Phase 2 Enhancements:** 🎯
+          - User preference learning
+          - Personalized weighting
+          - Taste profile building
+          - Genre/Actor/Director boosting
         """
         )
 
@@ -964,7 +1170,7 @@ st.markdown(
             Made with ❤️ by the SeoulMate Team | Powered by AI & Advanced Machine Learning
         </p>
         <p style="font-size: 0.8rem; opacity: 0.7;">
-            © 2025 SeoulMate - Your K-Drama Companion | v4.0 Phase 1 🆕
+            © 2025 SeoulMate - Your K-Drama Companion | v4.0 Phase 2 - Personalization �
         </p>
     </div>
     """,

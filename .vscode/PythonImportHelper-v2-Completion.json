@@ -49,6 +49,22 @@
         "documentation": {}
     },
     {
+        "label": "timedelta",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
         "label": "Dict",
         "importPath": "typing",
         "description": "typing",
@@ -66,6 +82,30 @@
     },
     {
         "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -98,6 +138,30 @@
     },
     {
         "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -154,6 +218,14 @@
     },
     {
         "label": "Counter",
+        "importPath": "collections",
+        "description": "collections",
+        "isExtraImport": true,
+        "detail": "collections",
+        "documentation": {}
+    },
+    {
+        "label": "defaultdict",
         "importPath": "collections",
         "description": "collections",
         "isExtraImport": true,
@@ -350,6 +422,15 @@
         "documentation": {}
     },
     {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
         "label": "QueryAnalyzer",
         "importPath": "query_analyzer",
         "description": "query_analyzer",
@@ -390,6 +471,55 @@
         "documentation": {}
     },
     {
+        "label": "get_profile_manager",
+        "importPath": "user_profile",
+        "description": "user_profile",
+        "isExtraImport": true,
+        "detail": "user_profile",
+        "documentation": {}
+    },
+    {
+        "label": "UserProfileManager",
+        "importPath": "user_profile",
+        "description": "user_profile",
+        "isExtraImport": true,
+        "detail": "user_profile",
+        "documentation": {}
+    },
+    {
+        "label": "UserProfileManager",
+        "importPath": "user_profile",
+        "description": "user_profile",
+        "isExtraImport": true,
+        "detail": "user_profile",
+        "documentation": {}
+    },
+    {
+        "label": "get_personalization_engine",
+        "importPath": "personalization",
+        "description": "personalization",
+        "isExtraImport": true,
+        "detail": "personalization",
+        "documentation": {}
+    },
+    {
+        "label": "PersonalizationEngine",
+        "importPath": "personalization",
+        "description": "personalization",
+        "isExtraImport": true,
+        "detail": "personalization",
+        "documentation": {}
+    },
+    {
+        "label": "math",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "math",
+        "description": "math",
+        "detail": "math",
+        "documentation": {}
+    },
+    {
         "label": "re",
         "kind": 6,
         "isExtraImport": true,
@@ -404,15 +534,6 @@
         "description": "enum",
         "isExtraImport": true,
         "detail": "enum",
-        "documentation": {}
-    },
-    {
-        "label": "requests",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "requests",
-        "description": "requests",
-        "detail": "requests",
         "documentation": {}
     },
     {
@@ -591,12 +712,12 @@
         "documentation": {}
     },
     {
-        "label": "time",
+        "label": "requests",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "time",
-        "description": "time",
-        "detail": "time",
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
         "documentation": {}
     },
     {
@@ -647,15 +768,6 @@
         "description": "sklearn.metrics",
         "isExtraImport": true,
         "detail": "sklearn.metrics",
-        "documentation": {}
-    },
-    {
-        "label": "math",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "math",
-        "description": "math",
-        "detail": "math",
         "documentation": {}
     },
     {
@@ -819,7 +931,7 @@
         "kind": 2,
         "importPath": "backend.app",
         "description": "backend.app",
-        "peekOfCode": "def root():\n    return {\n        \"message\": \"SeoulMate Kdrama Recommendation API v4.0 (Phase 1) is running\",\n        \"features\": [\n            \"Query Intent Detection\",\n            \"Dynamic Weight Adjustment\",\n            \"Query Expansion with Synonyms\",\n            \"Click Tracking & Analytics\",\n            \"User Behavior Learning\",\n        ],",
+        "peekOfCode": "def root():\n    return {\n        \"message\": \"SeoulMate Kdrama Recommendation API v4.0 Phase 2 is running\",\n        \"phase_1_features\": [\n            \"Query Intent Detection\",\n            \"Dynamic Weight Adjustment\",\n            \"Query Expansion with Synonyms\",\n            \"Click Tracking & Analytics\",\n            \"Auto-Genre Detection\",\n        ],",
         "detail": "backend.app",
         "documentation": {}
     },
@@ -874,6 +986,33 @@
         "importPath": "backend.app",
         "description": "backend.app",
         "peekOfCode": "def get_analytics_summary(\n    days: int = Query(7, description=\"Look back period in days\"),\n):\n    \"\"\"\n    Get overall analytics summary\n    Includes:\n    - Total searches\n    - Total interactions\n    - Click-through rate\n    - Unique users",
+        "detail": "backend.app",
+        "documentation": {}
+    },
+    {
+        "label": "get_user_profile",
+        "kind": 2,
+        "importPath": "backend.app",
+        "description": "backend.app",
+        "peekOfCode": "def get_user_profile(user_id: str):\n    \"\"\"\n    Get user's taste profile with preferences and statistics\n    Returns:\n    - Genre preferences with scores\n    - Favorite actors and directors\n    - Viewing patterns\n    - User persona labels\n    - Interaction statistics\n    \"\"\"",
+        "detail": "backend.app",
+        "documentation": {}
+    },
+    {
+        "label": "rate_drama",
+        "kind": 2,
+        "importPath": "backend.app",
+        "description": "backend.app",
+        "peekOfCode": "def rate_drama(\n    user_id: str,\n    drama_title: str = Query(..., description=\"Title of the drama to rate\"),\n    rating: float = Query(..., ge=0.0, le=10.0, description=\"Rating from 0-10\"),\n):\n    \"\"\"\n    Rate a drama and update user preferences\n    This will:\n    - Update user's genre preferences\n    - Update actor/director preferences",
+        "detail": "backend.app",
+        "documentation": {}
+    },
+    {
+        "label": "reset_user_profile",
+        "kind": 2,
+        "importPath": "backend.app",
+        "description": "backend.app",
+        "peekOfCode": "def reset_user_profile(user_id: str):\n    \"\"\"\n    Reset a user's profile (clear all preferences)\n    Use this to:\n    - Start fresh with recommendations\n    - Clear test data\n    - Reset after major preference changes\n    \"\"\"\n    try:\n        profile_manager = get_profile_manager()",
         "detail": "backend.app",
         "documentation": {}
     },
@@ -995,6 +1134,33 @@
         "documentation": {}
     },
     {
+        "label": "PersonalizationEngine",
+        "kind": 6,
+        "importPath": "backend.personalization",
+        "description": "backend.personalization",
+        "peekOfCode": "class PersonalizationEngine:\n    \"\"\"\n    Applies personalized weighting to recommendation results.\n    Features:\n    - Genre boosting based on user preferences\n    - Actor boosting based on user preferences\n    - Director boosting based on user preferences\n    - Theme matching and boosting\n    - User-specific alpha adjustment\n    \"\"\"",
+        "detail": "backend.personalization",
+        "documentation": {}
+    },
+    {
+        "label": "get_personalization_engine",
+        "kind": 2,
+        "importPath": "backend.personalization",
+        "description": "backend.personalization",
+        "peekOfCode": "def get_personalization_engine() -> PersonalizationEngine:\n    \"\"\"Get global PersonalizationEngine instance\"\"\"\n    global _personalization_engine\n    if _personalization_engine is None:\n        _personalization_engine = PersonalizationEngine()\n    return _personalization_engine",
+        "detail": "backend.personalization",
+        "documentation": {}
+    },
+    {
+        "label": "_personalization_engine",
+        "kind": 5,
+        "importPath": "backend.personalization",
+        "description": "backend.personalization",
+        "peekOfCode": "_personalization_engine = None\ndef get_personalization_engine() -> PersonalizationEngine:\n    \"\"\"Get global PersonalizationEngine instance\"\"\"\n    global _personalization_engine\n    if _personalization_engine is None:\n        _personalization_engine = PersonalizationEngine()\n    return _personalization_engine",
+        "detail": "backend.personalization",
+        "documentation": {}
+    },
+    {
         "label": "QueryIntent",
         "kind": 6,
         "importPath": "backend.query_analyzer",
@@ -1040,84 +1206,30 @@
         "documentation": {}
     },
     {
-        "label": "test_query_intent",
-        "kind": 2,
-        "importPath": "backend.test_phase1",
-        "description": "backend.test_phase1",
-        "peekOfCode": "def test_query_intent():\n    \"\"\"Test query intent detection and dynamic weights\"\"\"\n    print(\"\\n📝 TEST 1: Query Intent Detection & Dynamic Weights\")\n    print(\"-\" * 80)\n    test_queries = [\n        (\"romantic comedy\", \"genre_browse\"),\n        (\"something like Goblin\", \"similar_to\"),\n        (\"Park Seo-joon drama\", \"actor_based\"),\n        (\"best 2023 drama\", \"top_rated\"),\n        (\"sad emotional drama\", \"emotion_based\"),",
-        "detail": "backend.test_phase1",
+        "label": "UserProfileManager",
+        "kind": 6,
+        "importPath": "backend.user_profile",
+        "description": "backend.user_profile",
+        "peekOfCode": "class UserProfileManager:\n    \"\"\"\n    Manages user profiles and learns preferences from interactions.\n    Features:\n    - Genre preference tracking\n    - Actor preference tracking\n    - Theme preference extraction\n    - Rating pattern analysis\n    - Dynamic profile updating\n    \"\"\"",
+        "detail": "backend.user_profile",
         "documentation": {}
     },
     {
-        "label": "test_query_expansion",
+        "label": "get_profile_manager",
         "kind": 2,
-        "importPath": "backend.test_phase1",
-        "description": "backend.test_phase1",
-        "peekOfCode": "def test_query_expansion():\n    \"\"\"Test query expansion with synonyms\"\"\"\n    print(\"\\n\\n📚 TEST 2: Query Expansion\")\n    print(\"-\" * 80)\n    test_cases = [\"funny drama\", \"sad romance\", \"scary thriller\", \"old classic drama\"]\n    for query in test_cases:\n        try:\n            response = requests.get(\n                f\"{BASE_URL}/recommend\", params={\"title\": query, \"top_n\": 2}, timeout=10\n            )",
-        "detail": "backend.test_phase1",
+        "importPath": "backend.user_profile",
+        "description": "backend.user_profile",
+        "peekOfCode": "def get_profile_manager() -> UserProfileManager:\n    \"\"\"Get global UserProfileManager instance\"\"\"\n    global _profile_manager\n    if _profile_manager is None:\n        _profile_manager = UserProfileManager()\n    return _profile_manager",
+        "detail": "backend.user_profile",
         "documentation": {}
     },
     {
-        "label": "test_click_tracking",
-        "kind": 2,
-        "importPath": "backend.test_phase1",
-        "description": "backend.test_phase1",
-        "peekOfCode": "def test_click_tracking():\n    \"\"\"Test click tracking and analytics\"\"\"\n    print(\"\\n\\n📊 TEST 3: Click Tracking & Analytics\")\n    print(\"-\" * 80)\n    # Log some interactions\n    interactions = [\n        (\"Goblin\", \"click\", 1),\n        (\"Crash Landing on You\", \"click\", 2),\n        (\"Goblin\", \"watchlist_add\", None),\n        (\"Hotel Del Luna\", \"click\", 3),",
-        "detail": "backend.test_phase1",
-        "documentation": {}
-    },
-    {
-        "label": "test_analytics_endpoints",
-        "kind": 2,
-        "importPath": "backend.test_phase1",
-        "description": "backend.test_phase1",
-        "peekOfCode": "def test_analytics_endpoints():\n    \"\"\"Test analytics endpoints\"\"\"\n    print(\"\\n\\n📈 TEST 4: Analytics Endpoints\")\n    print(\"-\" * 80)\n    # Test popular dramas\n    print(\"\\n1. Popular Dramas (Last 7 days):\")\n    try:\n        response = requests.get(\n            f\"{BASE_URL}/analytics/popular\", params={\"days\": 7, \"limit\": 5}, timeout=5\n        )",
-        "detail": "backend.test_phase1",
-        "documentation": {}
-    },
-    {
-        "label": "test_dynamic_alpha_comparison",
-        "kind": 2,
-        "importPath": "backend.test_phase1",
-        "description": "backend.test_phase1",
-        "peekOfCode": "def test_dynamic_alpha_comparison():\n    \"\"\"Compare results with different intent types\"\"\"\n    print(\"\\n\\n⚖️  TEST 5: Dynamic Alpha Comparison\")\n    print(\"-\" * 80)\n    queries = [\n        (\"Park Seo-joon drama\", \"actor_based\", \"Lower alpha (more lexical)\"),\n        (\"sad emotional drama\", \"emotion_based\", \"Higher alpha (more semantic)\"),\n        (\"romance drama\", \"genre_browse\", \"Balanced alpha\"),\n    ]\n    for query, expected_intent, description in queries:",
-        "detail": "backend.test_phase1",
-        "documentation": {}
-    },
-    {
-        "label": "main",
-        "kind": 2,
-        "importPath": "backend.test_phase1",
-        "description": "backend.test_phase1",
-        "peekOfCode": "def main():\n    \"\"\"Run all tests\"\"\"\n    print(\"\\n🚀 Starting Phase 1 Tests...\\n\")\n    try:\n        # Check if backend is running\n        response = requests.get(f\"{BASE_URL}/\", timeout=5)\n        if response.status_code != 200:\n            print(\"❌ ERROR: Backend is not running!\")\n            print(f\"   Please start the backend: cd backend && python app.py\")\n            return",
-        "detail": "backend.test_phase1",
-        "documentation": {}
-    },
-    {
-        "label": "BASE_URL",
+        "label": "_profile_manager",
         "kind": 5,
-        "importPath": "backend.test_phase1",
-        "description": "backend.test_phase1",
-        "peekOfCode": "BASE_URL = \"http://127.0.0.1:8001\"\n# Test user\nTEST_USER_ID = \"test_user_phase1\"\nTEST_SESSION_ID = f\"session_{datetime.now().timestamp()}\"\nprint(\"=\" * 80)\nprint(\"SEOULMATE PHASE 1 TEST SUITE\")\nprint(\"=\" * 80)\nprint(f\"Backend: {BASE_URL}\")\nprint(f\"User: {TEST_USER_ID}\")\nprint(f\"Session: {TEST_SESSION_ID}\")",
-        "detail": "backend.test_phase1",
-        "documentation": {}
-    },
-    {
-        "label": "TEST_USER_ID",
-        "kind": 5,
-        "importPath": "backend.test_phase1",
-        "description": "backend.test_phase1",
-        "peekOfCode": "TEST_USER_ID = \"test_user_phase1\"\nTEST_SESSION_ID = f\"session_{datetime.now().timestamp()}\"\nprint(\"=\" * 80)\nprint(\"SEOULMATE PHASE 1 TEST SUITE\")\nprint(\"=\" * 80)\nprint(f\"Backend: {BASE_URL}\")\nprint(f\"User: {TEST_USER_ID}\")\nprint(f\"Session: {TEST_SESSION_ID}\")\nprint(\"=\" * 80)\ndef test_query_intent():",
-        "detail": "backend.test_phase1",
-        "documentation": {}
-    },
-    {
-        "label": "TEST_SESSION_ID",
-        "kind": 5,
-        "importPath": "backend.test_phase1",
-        "description": "backend.test_phase1",
-        "peekOfCode": "TEST_SESSION_ID = f\"session_{datetime.now().timestamp()}\"\nprint(\"=\" * 80)\nprint(\"SEOULMATE PHASE 1 TEST SUITE\")\nprint(\"=\" * 80)\nprint(f\"Backend: {BASE_URL}\")\nprint(f\"User: {TEST_USER_ID}\")\nprint(f\"Session: {TEST_SESSION_ID}\")\nprint(\"=\" * 80)\ndef test_query_intent():\n    \"\"\"Test query intent detection and dynamic weights\"\"\"",
-        "detail": "backend.test_phase1",
+        "importPath": "backend.user_profile",
+        "description": "backend.user_profile",
+        "peekOfCode": "_profile_manager = None\ndef get_profile_manager() -> UserProfileManager:\n    \"\"\"Get global UserProfileManager instance\"\"\"\n    global _profile_manager\n    if _profile_manager is None:\n        _profile_manager = UserProfileManager()\n    return _profile_manager",
+        "detail": "backend.user_profile",
         "documentation": {}
     },
     {
@@ -1991,6 +2103,384 @@
         "description": "tests.test_historical",
         "peekOfCode": "results = response.json()\nprint(f\"\\nQuery: {results['query']}\")\nprint(f\"Filters: {results['filters']}\")\nprint(f\"\\nRecommendations ({len(results['recommendations'])}):\")\nfor i, rec in enumerate(results[\"recommendations\"], 1):\n    print(f\"\\n{i}. {rec['Title']}\")\n    print(f\"   Genre: {rec.get('Genre', 'N/A')}\")\n    print(f\"   Rating: {rec.get('rating_value', 'N/A')}\")",
         "detail": "tests.test_historical",
+        "documentation": {}
+    },
+    {
+        "label": "profile_manager",
+        "kind": 5,
+        "importPath": "tests.test_personalization",
+        "description": "tests.test_personalization",
+        "peekOfCode": "profile_manager = UserProfileManager(profiles_dir=\"../tests/test_profiles\")\npersonalization_engine = PersonalizationEngine()\n# Test 1: Create two users with different preferences\nprint(\"\\n1️⃣ Creating two users with different preferences...\")\n# Medical Drama Fan\nmedical_user = \"medical_fan\"\nmedical_dramas = [\n    {\n        \"Title\": \"Hospital Playlist\",\n        \"Genre\": \"Medical, Life\",",
+        "detail": "tests.test_personalization",
+        "documentation": {}
+    },
+    {
+        "label": "personalization_engine",
+        "kind": 5,
+        "importPath": "tests.test_personalization",
+        "description": "tests.test_personalization",
+        "peekOfCode": "personalization_engine = PersonalizationEngine()\n# Test 1: Create two users with different preferences\nprint(\"\\n1️⃣ Creating two users with different preferences...\")\n# Medical Drama Fan\nmedical_user = \"medical_fan\"\nmedical_dramas = [\n    {\n        \"Title\": \"Hospital Playlist\",\n        \"Genre\": \"Medical, Life\",\n        \"Cast\": \"Jo Jung-suk, Yoo Yeon-seok\",",
+        "detail": "tests.test_personalization",
+        "documentation": {}
+    },
+    {
+        "label": "medical_user",
+        "kind": 5,
+        "importPath": "tests.test_personalization",
+        "description": "tests.test_personalization",
+        "peekOfCode": "medical_user = \"medical_fan\"\nmedical_dramas = [\n    {\n        \"Title\": \"Hospital Playlist\",\n        \"Genre\": \"Medical, Life\",\n        \"Cast\": \"Jo Jung-suk, Yoo Yeon-seok\",\n        \"Director\": \"Shin Won-ho\",\n    },\n    {\n        \"Title\": \"Good Doctor\",",
+        "detail": "tests.test_personalization",
+        "documentation": {}
+    },
+    {
+        "label": "medical_dramas",
+        "kind": 5,
+        "importPath": "tests.test_personalization",
+        "description": "tests.test_personalization",
+        "peekOfCode": "medical_dramas = [\n    {\n        \"Title\": \"Hospital Playlist\",\n        \"Genre\": \"Medical, Life\",\n        \"Cast\": \"Jo Jung-suk, Yoo Yeon-seok\",\n        \"Director\": \"Shin Won-ho\",\n    },\n    {\n        \"Title\": \"Good Doctor\",\n        \"Genre\": \"Medical\",",
+        "detail": "tests.test_personalization",
+        "documentation": {}
+    },
+    {
+        "label": "thriller_user",
+        "kind": 5,
+        "importPath": "tests.test_personalization",
+        "description": "tests.test_personalization",
+        "peekOfCode": "thriller_user = \"thriller_fan\"\nthriller_dramas = [\n    {\n        \"Title\": \"Signal\",\n        \"Genre\": \"Thriller, Mystery\",\n        \"Cast\": \"Lee Je-hoon, Kim Hye-soo\",\n        \"Director\": \"Kim Won-seok\",\n    },\n    {\n        \"Title\": \"Stranger\",",
+        "detail": "tests.test_personalization",
+        "documentation": {}
+    },
+    {
+        "label": "thriller_dramas",
+        "kind": 5,
+        "importPath": "tests.test_personalization",
+        "description": "tests.test_personalization",
+        "peekOfCode": "thriller_dramas = [\n    {\n        \"Title\": \"Signal\",\n        \"Genre\": \"Thriller, Mystery\",\n        \"Cast\": \"Lee Je-hoon, Kim Hye-soo\",\n        \"Director\": \"Kim Won-seok\",\n    },\n    {\n        \"Title\": \"Stranger\",\n        \"Genre\": \"Thriller, Crime\",",
+        "detail": "tests.test_personalization",
+        "documentation": {}
+    },
+    {
+        "label": "mock_results",
+        "kind": 5,
+        "importPath": "tests.test_personalization",
+        "description": "tests.test_personalization",
+        "peekOfCode": "mock_results = [\n    {\n        \"Title\": \"Doctor John\",\n        \"Genre\": \"Medical, Romance\",\n        \"Cast\": \"Ji Sung, Lee Se-young\",\n        \"Director\": \"Jo Soo-won\",\n        \"score\": 0.75,\n    },\n    {\n        \"Title\": \"Flower of Evil\",",
+        "detail": "tests.test_personalization",
+        "documentation": {}
+    },
+    {
+        "label": "medical_profile",
+        "kind": 5,
+        "importPath": "tests.test_personalization",
+        "description": "tests.test_personalization",
+        "peekOfCode": "medical_profile = profile_manager.load_profile(medical_user)\nmedical_results = personalization_engine.personalize_results(\n    mock_results.copy(), medical_profile, apply_boosting=True\n)\nprint(\"   Results for Medical fan:\")\nfor i, drama in enumerate(medical_results[:3], 1):\n    boost = drama.get(\"boost_multiplier\", 1.0)\n    base = drama.get(\"base_score\", 0)\n    pers = drama.get(\"personalized_score\", 0)\n    print(f\"      {i}. {drama['Title']}\")",
+        "detail": "tests.test_personalization",
+        "documentation": {}
+    },
+    {
+        "label": "medical_results",
+        "kind": 5,
+        "importPath": "tests.test_personalization",
+        "description": "tests.test_personalization",
+        "peekOfCode": "medical_results = personalization_engine.personalize_results(\n    mock_results.copy(), medical_profile, apply_boosting=True\n)\nprint(\"   Results for Medical fan:\")\nfor i, drama in enumerate(medical_results[:3], 1):\n    boost = drama.get(\"boost_multiplier\", 1.0)\n    base = drama.get(\"base_score\", 0)\n    pers = drama.get(\"personalized_score\", 0)\n    print(f\"      {i}. {drama['Title']}\")\n    print(f\"         Genre: {drama['Genre']}\")",
+        "detail": "tests.test_personalization",
+        "documentation": {}
+    },
+    {
+        "label": "thriller_profile",
+        "kind": 5,
+        "importPath": "tests.test_personalization",
+        "description": "tests.test_personalization",
+        "peekOfCode": "thriller_profile = profile_manager.load_profile(thriller_user)\nthriller_results = personalization_engine.personalize_results(\n    mock_results.copy(), thriller_profile, apply_boosting=True\n)\nprint(\"   Results for Thriller fan:\")\nfor i, drama in enumerate(thriller_results[:3], 1):\n    boost = drama.get(\"boost_multiplier\", 1.0)\n    base = drama.get(\"base_score\", 0)\n    pers = drama.get(\"personalized_score\", 0)\n    print(f\"      {i}. {drama['Title']}\")",
+        "detail": "tests.test_personalization",
+        "documentation": {}
+    },
+    {
+        "label": "thriller_results",
+        "kind": 5,
+        "importPath": "tests.test_personalization",
+        "description": "tests.test_personalization",
+        "peekOfCode": "thriller_results = personalization_engine.personalize_results(\n    mock_results.copy(), thriller_profile, apply_boosting=True\n)\nprint(\"   Results for Thriller fan:\")\nfor i, drama in enumerate(thriller_results[:3], 1):\n    boost = drama.get(\"boost_multiplier\", 1.0)\n    base = drama.get(\"base_score\", 0)\n    pers = drama.get(\"personalized_score\", 0)\n    print(f\"      {i}. {drama['Title']}\")\n    print(f\"         Genre: {drama['Genre']}\")",
+        "detail": "tests.test_personalization",
+        "documentation": {}
+    },
+    {
+        "label": "medical_top",
+        "kind": 5,
+        "importPath": "tests.test_personalization",
+        "description": "tests.test_personalization",
+        "peekOfCode": "medical_top = medical_results[0][\"Title\"]\nthriller_top = thriller_results[0][\"Title\"]\nprint(f\"   Medical fan's #1 recommendation: {medical_top}\")\nprint(f\"   Thriller fan's #1 recommendation: {thriller_top}\")\nif medical_top != thriller_top:\n    print(\"   ✅ SUCCESS: Different users get different recommendations!\")\nelse:\n    print(\"   ⚠️  Warning: Both users got same top recommendation\")\n# Test 6: Test personalization summaries\nprint(\"\\n6️⃣ Testing personalization summaries...\")",
+        "detail": "tests.test_personalization",
+        "documentation": {}
+    },
+    {
+        "label": "thriller_top",
+        "kind": 5,
+        "importPath": "tests.test_personalization",
+        "description": "tests.test_personalization",
+        "peekOfCode": "thriller_top = thriller_results[0][\"Title\"]\nprint(f\"   Medical fan's #1 recommendation: {medical_top}\")\nprint(f\"   Thriller fan's #1 recommendation: {thriller_top}\")\nif medical_top != thriller_top:\n    print(\"   ✅ SUCCESS: Different users get different recommendations!\")\nelse:\n    print(\"   ⚠️  Warning: Both users got same top recommendation\")\n# Test 6: Test personalization summaries\nprint(\"\\n6️⃣ Testing personalization summaries...\")\nfor drama in medical_results[:2]:",
+        "detail": "tests.test_personalization",
+        "documentation": {}
+    },
+    {
+        "label": "base_alpha",
+        "kind": 5,
+        "importPath": "tests.test_personalization",
+        "description": "tests.test_personalization",
+        "peekOfCode": "base_alpha = 0.7\nmedical_alpha = personalization_engine.calculate_user_specific_alpha(\n    medical_profile, base_alpha\n)\nthriller_alpha = personalization_engine.calculate_user_specific_alpha(\n    thriller_profile, base_alpha\n)\nprint(f\"   Base alpha: {base_alpha:.2f}\")\nprint(f\"   Medical fan alpha: {medical_alpha:.2f}\")\nprint(f\"   Thriller fan alpha: {thriller_alpha:.2f}\")",
+        "detail": "tests.test_personalization",
+        "documentation": {}
+    },
+    {
+        "label": "medical_alpha",
+        "kind": 5,
+        "importPath": "tests.test_personalization",
+        "description": "tests.test_personalization",
+        "peekOfCode": "medical_alpha = personalization_engine.calculate_user_specific_alpha(\n    medical_profile, base_alpha\n)\nthriller_alpha = personalization_engine.calculate_user_specific_alpha(\n    thriller_profile, base_alpha\n)\nprint(f\"   Base alpha: {base_alpha:.2f}\")\nprint(f\"   Medical fan alpha: {medical_alpha:.2f}\")\nprint(f\"   Thriller fan alpha: {thriller_alpha:.2f}\")\nprint(\"\\n\" + \"=\" * 80)",
+        "detail": "tests.test_personalization",
+        "documentation": {}
+    },
+    {
+        "label": "thriller_alpha",
+        "kind": 5,
+        "importPath": "tests.test_personalization",
+        "description": "tests.test_personalization",
+        "peekOfCode": "thriller_alpha = personalization_engine.calculate_user_specific_alpha(\n    thriller_profile, base_alpha\n)\nprint(f\"   Base alpha: {base_alpha:.2f}\")\nprint(f\"   Medical fan alpha: {medical_alpha:.2f}\")\nprint(f\"   Thriller fan alpha: {thriller_alpha:.2f}\")\nprint(\"\\n\" + \"=\" * 80)\nprint(\"✅ Personalized Weighting Tests Complete!\")\nprint(\"=\" * 80)\nprint(\"\\n📊 Summary:\")",
+        "detail": "tests.test_personalization",
+        "documentation": {}
+    },
+    {
+        "label": "test_query_intent",
+        "kind": 2,
+        "importPath": "tests.test_phase1",
+        "description": "tests.test_phase1",
+        "peekOfCode": "def test_query_intent():\n    \"\"\"Test query intent detection and dynamic weights\"\"\"\n    print(\"\\n📝 TEST 1: Query Intent Detection & Dynamic Weights\")\n    print(\"-\" * 80)\n    test_queries = [\n        (\"romantic comedy\", \"genre_browse\"),\n        (\"something like Goblin\", \"similar_to\"),\n        (\"Park Seo-joon drama\", \"actor_based\"),\n        (\"best 2023 drama\", \"top_rated\"),\n        (\"sad emotional drama\", \"emotion_based\"),",
+        "detail": "tests.test_phase1",
+        "documentation": {}
+    },
+    {
+        "label": "test_query_expansion",
+        "kind": 2,
+        "importPath": "tests.test_phase1",
+        "description": "tests.test_phase1",
+        "peekOfCode": "def test_query_expansion():\n    \"\"\"Test query expansion with synonyms\"\"\"\n    print(\"\\n\\n📚 TEST 2: Query Expansion\")\n    print(\"-\" * 80)\n    test_cases = [\"funny drama\", \"sad romance\", \"scary thriller\", \"old classic drama\"]\n    for query in test_cases:\n        try:\n            response = requests.get(\n                f\"{BASE_URL}/recommend\", params={\"title\": query, \"top_n\": 2}, timeout=10\n            )",
+        "detail": "tests.test_phase1",
+        "documentation": {}
+    },
+    {
+        "label": "test_click_tracking",
+        "kind": 2,
+        "importPath": "tests.test_phase1",
+        "description": "tests.test_phase1",
+        "peekOfCode": "def test_click_tracking():\n    \"\"\"Test click tracking and analytics\"\"\"\n    print(\"\\n\\n📊 TEST 3: Click Tracking & Analytics\")\n    print(\"-\" * 80)\n    # Log some interactions\n    interactions = [\n        (\"Goblin\", \"click\", 1),\n        (\"Crash Landing on You\", \"click\", 2),\n        (\"Goblin\", \"watchlist_add\", None),\n        (\"Hotel Del Luna\", \"click\", 3),",
+        "detail": "tests.test_phase1",
+        "documentation": {}
+    },
+    {
+        "label": "test_analytics_endpoints",
+        "kind": 2,
+        "importPath": "tests.test_phase1",
+        "description": "tests.test_phase1",
+        "peekOfCode": "def test_analytics_endpoints():\n    \"\"\"Test analytics endpoints\"\"\"\n    print(\"\\n\\n📈 TEST 4: Analytics Endpoints\")\n    print(\"-\" * 80)\n    # Test popular dramas\n    print(\"\\n1. Popular Dramas (Last 7 days):\")\n    try:\n        response = requests.get(\n            f\"{BASE_URL}/analytics/popular\", params={\"days\": 7, \"limit\": 5}, timeout=5\n        )",
+        "detail": "tests.test_phase1",
+        "documentation": {}
+    },
+    {
+        "label": "test_dynamic_alpha_comparison",
+        "kind": 2,
+        "importPath": "tests.test_phase1",
+        "description": "tests.test_phase1",
+        "peekOfCode": "def test_dynamic_alpha_comparison():\n    \"\"\"Compare results with different intent types\"\"\"\n    print(\"\\n\\n⚖️  TEST 5: Dynamic Alpha Comparison\")\n    print(\"-\" * 80)\n    queries = [\n        (\"Park Seo-joon drama\", \"actor_based\", \"Lower alpha (more lexical)\"),\n        (\"sad emotional drama\", \"emotion_based\", \"Higher alpha (more semantic)\"),\n        (\"romance drama\", \"genre_browse\", \"Balanced alpha\"),\n    ]\n    for query, expected_intent, description in queries:",
+        "detail": "tests.test_phase1",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "tests.test_phase1",
+        "description": "tests.test_phase1",
+        "peekOfCode": "def main():\n    \"\"\"Run all tests\"\"\"\n    print(\"\\n🚀 Starting Phase 1 Tests...\\n\")\n    try:\n        # Check if backend is running\n        response = requests.get(f\"{BASE_URL}/\", timeout=5)\n        if response.status_code != 200:\n            print(\"❌ ERROR: Backend is not running!\")\n            print(f\"   Please start the backend: cd backend && python app.py\")\n            return",
+        "detail": "tests.test_phase1",
+        "documentation": {}
+    },
+    {
+        "label": "BASE_URL",
+        "kind": 5,
+        "importPath": "tests.test_phase1",
+        "description": "tests.test_phase1",
+        "peekOfCode": "BASE_URL = \"http://127.0.0.1:8001\"\n# Test user\nTEST_USER_ID = \"test_user_phase1\"\nTEST_SESSION_ID = f\"session_{datetime.now().timestamp()}\"\nprint(\"=\" * 80)\nprint(\"SEOULMATE PHASE 1 TEST SUITE\")\nprint(\"=\" * 80)\nprint(f\"Backend: {BASE_URL}\")\nprint(f\"User: {TEST_USER_ID}\")\nprint(f\"Session: {TEST_SESSION_ID}\")",
+        "detail": "tests.test_phase1",
+        "documentation": {}
+    },
+    {
+        "label": "TEST_USER_ID",
+        "kind": 5,
+        "importPath": "tests.test_phase1",
+        "description": "tests.test_phase1",
+        "peekOfCode": "TEST_USER_ID = \"test_user_phase1\"\nTEST_SESSION_ID = f\"session_{datetime.now().timestamp()}\"\nprint(\"=\" * 80)\nprint(\"SEOULMATE PHASE 1 TEST SUITE\")\nprint(\"=\" * 80)\nprint(f\"Backend: {BASE_URL}\")\nprint(f\"User: {TEST_USER_ID}\")\nprint(f\"Session: {TEST_SESSION_ID}\")\nprint(\"=\" * 80)\ndef test_query_intent():",
+        "detail": "tests.test_phase1",
+        "documentation": {}
+    },
+    {
+        "label": "TEST_SESSION_ID",
+        "kind": 5,
+        "importPath": "tests.test_phase1",
+        "description": "tests.test_phase1",
+        "peekOfCode": "TEST_SESSION_ID = f\"session_{datetime.now().timestamp()}\"\nprint(\"=\" * 80)\nprint(\"SEOULMATE PHASE 1 TEST SUITE\")\nprint(\"=\" * 80)\nprint(f\"Backend: {BASE_URL}\")\nprint(f\"User: {TEST_USER_ID}\")\nprint(f\"Session: {TEST_SESSION_ID}\")\nprint(\"=\" * 80)\ndef test_query_intent():\n    \"\"\"Test query intent detection and dynamic weights\"\"\"",
+        "detail": "tests.test_phase1",
+        "documentation": {}
+    },
+    {
+        "label": "API_URL",
+        "kind": 5,
+        "importPath": "tests.test_phase2_complete",
+        "description": "tests.test_phase2_complete",
+        "peekOfCode": "API_URL = \"http://127.0.0.1:8001\"\nprint(\"=\" * 80)\nprint(\"Phase 2 Complete Integration Test\")\nprint(\"=\" * 80)\n# Check API health\nprint(\"\\n1️⃣ Checking API health...\")\ntry:\n    response = requests.get(f\"{API_URL}/\", timeout=3)\n    if response.status_code == 200:\n        data = response.json()",
+        "detail": "tests.test_phase2_complete",
+        "documentation": {}
+    },
+    {
+        "label": "test_user_id",
+        "kind": 5,
+        "importPath": "tests.test_phase2_complete",
+        "description": "tests.test_phase2_complete",
+        "peekOfCode": "test_user_id = f\"test_user_{int(time.time())}\"\nprint(f\"   User ID: {test_user_id}\")\n# Test 3: Rate some dramas to build profile\nprint(\"\\n3️⃣ Rating dramas to build taste profile...\")\ndramas_to_rate = [\n    (\"Hospital Playlist\", 9.5),\n    (\"Good Doctor\", 9.0),\n    (\"Romantic Doctor Kim\", 8.5),\n    (\"Doctor John\", 8.0),\n]",
+        "detail": "tests.test_phase2_complete",
+        "documentation": {}
+    },
+    {
+        "label": "dramas_to_rate",
+        "kind": 5,
+        "importPath": "tests.test_phase2_complete",
+        "description": "tests.test_phase2_complete",
+        "peekOfCode": "dramas_to_rate = [\n    (\"Hospital Playlist\", 9.5),\n    (\"Good Doctor\", 9.0),\n    (\"Romantic Doctor Kim\", 8.5),\n    (\"Doctor John\", 8.0),\n]\nfor drama_title, rating in dramas_to_rate:\n    try:\n        response = requests.post(\n            f\"{API_URL}/profile/{test_user_id}/rate\",",
+        "detail": "tests.test_phase2_complete",
+        "documentation": {}
+    },
+    {
+        "label": "response",
+        "kind": 5,
+        "importPath": "tests.test_phase2_complete",
+        "description": "tests.test_phase2_complete",
+        "peekOfCode": "response = input(\"   Do you want to delete the test user profile? (y/n): \")\nif response.lower() == \"y\":\n    try:\n        response = requests.delete(f\"{API_URL}/profile/{test_user_id}\", timeout=3)\n        if response.status_code == 200:\n            print(\"   ✅ Test profile deleted\")\n        else:\n            print(f\"   ⚠️  Could not delete profile\")\n    except Exception as e:\n        print(f\"   ❌ Error: {str(e)}\")",
+        "detail": "tests.test_phase2_complete",
+        "documentation": {}
+    },
+    {
+        "label": "profile_manager",
+        "kind": 5,
+        "importPath": "tests.test_user_profile",
+        "description": "tests.test_user_profile",
+        "peekOfCode": "profile_manager = UserProfileManager(profiles_dir=\"../tests/test_profiles\")\nprint(\"=\" * 80)\nprint(\"Testing User Profile System (Phase 2)\")\nprint(\"=\" * 80)\n# Test 1: Create new user profile\nprint(\"\\n1️⃣ Creating new user profile...\")\nuser_id = \"test_user_phase2\"\nprofile = profile_manager.load_profile(user_id)\nprint(f\"✅ Created profile for {user_id}\")\nprint(f\"   Statistics: {profile['statistics']}\")",
+        "detail": "tests.test_user_profile",
+        "documentation": {}
+    },
+    {
+        "label": "user_id",
+        "kind": 5,
+        "importPath": "tests.test_user_profile",
+        "description": "tests.test_user_profile",
+        "peekOfCode": "user_id = \"test_user_phase2\"\nprofile = profile_manager.load_profile(user_id)\nprint(f\"✅ Created profile for {user_id}\")\nprint(f\"   Statistics: {profile['statistics']}\")\n# Test 2: Simulate interactions with Medical dramas\nprint(\"\\n2️⃣ Simulating interactions with Medical dramas...\")\nmedical_dramas = [\n    {\n        \"Title\": \"Hospital Playlist\",\n        \"Genre\": \"Medical, Life, Friendship\",",
+        "detail": "tests.test_user_profile",
+        "documentation": {}
+    },
+    {
+        "label": "profile",
+        "kind": 5,
+        "importPath": "tests.test_user_profile",
+        "description": "tests.test_user_profile",
+        "peekOfCode": "profile = profile_manager.load_profile(user_id)\nprint(f\"✅ Created profile for {user_id}\")\nprint(f\"   Statistics: {profile['statistics']}\")\n# Test 2: Simulate interactions with Medical dramas\nprint(\"\\n2️⃣ Simulating interactions with Medical dramas...\")\nmedical_dramas = [\n    {\n        \"Title\": \"Hospital Playlist\",\n        \"Genre\": \"Medical, Life, Friendship\",\n        \"Cast\": \"Jo Jung-suk, Yoo Yeon-seok, Jung Kyung-ho\",",
+        "detail": "tests.test_user_profile",
+        "documentation": {}
+    },
+    {
+        "label": "medical_dramas",
+        "kind": 5,
+        "importPath": "tests.test_user_profile",
+        "description": "tests.test_user_profile",
+        "peekOfCode": "medical_dramas = [\n    {\n        \"Title\": \"Hospital Playlist\",\n        \"Genre\": \"Medical, Life, Friendship\",\n        \"Cast\": \"Jo Jung-suk, Yoo Yeon-seok, Jung Kyung-ho\",\n        \"Director\": \"Shin Won-ho\",\n        \"Description\": \"A heartwarming drama about five doctors who have been friends since medical school\",\n        \"keywords\": \"friendship, medical, heartwarming, realistic\",\n        \"episodes\": \"12\",\n    },",
+        "detail": "tests.test_user_profile",
+        "documentation": {}
+    },
+    {
+        "label": "top_genres",
+        "kind": 5,
+        "importPath": "tests.test_user_profile",
+        "description": "tests.test_user_profile",
+        "peekOfCode": "top_genres = profile_manager.get_top_preferences(user_id, \"genres\", 5)\nprint(\"   Top genres:\")\nfor genre, score in top_genres:\n    print(f\"      {genre}: {score:.2f}\")\n# Test 4: Check actor preferences\nprint(\"\\n4️⃣ Checking learned actor preferences...\")\ntop_actors = profile_manager.get_top_preferences(user_id, \"actors\", 5)\nprint(\"   Top actors:\")\nfor actor, score in top_actors:\n    print(f\"      {actor}: {score:.2f}\")",
+        "detail": "tests.test_user_profile",
+        "documentation": {}
+    },
+    {
+        "label": "top_actors",
+        "kind": 5,
+        "importPath": "tests.test_user_profile",
+        "description": "tests.test_user_profile",
+        "peekOfCode": "top_actors = profile_manager.get_top_preferences(user_id, \"actors\", 5)\nprint(\"   Top actors:\")\nfor actor, score in top_actors:\n    print(f\"      {actor}: {score:.2f}\")\n# Test 5: Check theme preferences\nprint(\"\\n5️⃣ Checking learned theme preferences...\")\ntop_themes = profile_manager.get_top_preferences(user_id, \"themes\", 5)\nprint(\"   Top themes:\")\nfor theme, score in top_themes:\n    print(f\"      {theme}: {score:.2f}\")",
+        "detail": "tests.test_user_profile",
+        "documentation": {}
+    },
+    {
+        "label": "top_themes",
+        "kind": 5,
+        "importPath": "tests.test_user_profile",
+        "description": "tests.test_user_profile",
+        "peekOfCode": "top_themes = profile_manager.get_top_preferences(user_id, \"themes\", 5)\nprint(\"   Top themes:\")\nfor theme, score in top_themes:\n    print(f\"      {theme}: {score:.2f}\")\n# Test 6: Add some Romance dramas\nprint(\"\\n6️⃣ Adding Romance drama interactions...\")\nromance_dramas = [\n    {\n        \"Title\": \"Crash Landing on You\",\n        \"Genre\": \"Romance, Comedy, Drama\",",
+        "detail": "tests.test_user_profile",
+        "documentation": {}
+    },
+    {
+        "label": "romance_dramas",
+        "kind": 5,
+        "importPath": "tests.test_user_profile",
+        "description": "tests.test_user_profile",
+        "peekOfCode": "romance_dramas = [\n    {\n        \"Title\": \"Crash Landing on You\",\n        \"Genre\": \"Romance, Comedy, Drama\",\n        \"Cast\": \"Hyun Bin, Son Ye-jin\",\n        \"Director\": \"Lee Jung-hyo\",\n        \"Description\": \"A South Korean heiress accidentally paraglides into North Korea\",\n        \"keywords\": \"romance, comedy, emotional, heartwarming\",\n        \"episodes\": \"16\",\n    }",
+        "detail": "tests.test_user_profile",
+        "documentation": {}
+    },
+    {
+        "label": "top_genres",
+        "kind": 5,
+        "importPath": "tests.test_user_profile",
+        "description": "tests.test_user_profile",
+        "peekOfCode": "top_genres = profile_manager.get_top_preferences(user_id, \"genres\", 5)\nprint(\"   Top genres:\")\nfor genre, score in top_genres:\n    print(f\"      {genre}: {score:.2f}\")\n# Test 8: Get profile summary\nprint(\"\\n8️⃣ Getting profile summary...\")\nsummary = profile_manager.get_profile_summary(user_id)\nprint(f\"   Persona: {summary['persona']}\")\nprint(f\"   Total interactions: {summary['statistics']['total_interactions']}\")\nprint(f\"   Total watched: {summary['statistics']['total_watched']}\")",
+        "detail": "tests.test_user_profile",
+        "documentation": {}
+    },
+    {
+        "label": "summary",
+        "kind": 5,
+        "importPath": "tests.test_user_profile",
+        "description": "tests.test_user_profile",
+        "peekOfCode": "summary = profile_manager.get_profile_summary(user_id)\nprint(f\"   Persona: {summary['persona']}\")\nprint(f\"   Total interactions: {summary['statistics']['total_interactions']}\")\nprint(f\"   Total watched: {summary['statistics']['total_watched']}\")\nprint(f\"   Avg rating: {summary['statistics']['avg_rating']:.2f}\")\nprint(f\"   Rating style: {summary['statistics']['rating_style']}\")\nprint(f\"   Binge watcher: {summary['viewing_patterns']['binge_watcher']}\")\n# Test 9: Test with different user (Thriller fan)\nprint(\"\\n9️⃣ Creating Thriller fan profile...\")\nthriller_user = \"test_thriller_fan\"",
+        "detail": "tests.test_user_profile",
+        "documentation": {}
+    },
+    {
+        "label": "thriller_user",
+        "kind": 5,
+        "importPath": "tests.test_user_profile",
+        "description": "tests.test_user_profile",
+        "peekOfCode": "thriller_user = \"test_thriller_fan\"\nthriller_dramas = [\n    {\n        \"Title\": \"Signal\",\n        \"Genre\": \"Thriller, Mystery, Crime\",\n        \"Cast\": \"Lee Je-hoon, Kim Hye-soo\",\n        \"Director\": \"Kim Won-seok\",\n        \"Description\": \"Detectives from different time periods communicate via mysterious walkie-talkie\",\n        \"keywords\": \"suspense, mystery, crime, thriller\",\n        \"episodes\": \"16\",",
+        "detail": "tests.test_user_profile",
+        "documentation": {}
+    },
+    {
+        "label": "thriller_dramas",
+        "kind": 5,
+        "importPath": "tests.test_user_profile",
+        "description": "tests.test_user_profile",
+        "peekOfCode": "thriller_dramas = [\n    {\n        \"Title\": \"Signal\",\n        \"Genre\": \"Thriller, Mystery, Crime\",\n        \"Cast\": \"Lee Je-hoon, Kim Hye-soo\",\n        \"Director\": \"Kim Won-seok\",\n        \"Description\": \"Detectives from different time periods communicate via mysterious walkie-talkie\",\n        \"keywords\": \"suspense, mystery, crime, thriller\",\n        \"episodes\": \"16\",\n    },",
+        "detail": "tests.test_user_profile",
+        "documentation": {}
+    },
+    {
+        "label": "thriller_summary",
+        "kind": 5,
+        "importPath": "tests.test_user_profile",
+        "description": "tests.test_user_profile",
+        "peekOfCode": "thriller_summary = profile_manager.get_profile_summary(thriller_user)\nprint(f\"   Thriller fan persona: {thriller_summary['persona']}\")\nprint(f\"   Top genres: {[g[0] for g in thriller_summary['top_genres'][:3]]}\")\nprint(\"\\n\" + \"=\" * 80)\nprint(\"✅ User Profile System Tests Complete!\")\nprint(\"=\" * 80)\nprint(\"\\n📊 Summary:\")\nprint(f\"   - Created 2 user profiles\")\nprint(f\"   - Tested genre, actor, theme preference learning\")\nprint(f\"   - Verified different users have different preferences\")",
+        "detail": "tests.test_user_profile",
         "documentation": {}
     }
 ]

@@ -1,0 +1,81 @@
+{
+  "user_id": "test_user_phase2",
+  "created_at": "2025-11-10T16:09:03.790083",
+  "last_updated": "2025-11-10T16:09:03.873564",
+  "preferences": {
+    "genres": {
+      "Medical": 0.6952000000000002,
+      "Life": 0.5800000000000001,
+      "Friendship": 0.5800000000000001,
+      "Drama": 0.5840000000000001,
+      "Romance": 0.5840000000000001,
+      "Comedy": 0.52
+    },
+    "actors": {
+      "Jo Jung-suk": 0.5800000000000001,
+      "Yoo Yeon-seok": 0.5800000000000001,
+      "Jung Kyung-ho": 0.5800000000000001,
+      "Joo Won": 0.5800000000000001,
+      "Moon Chae-won": 0.5800000000000001,
+      "Ji Sung": 0.5800000000000001,
+      "Lee Se-young": 0.5800000000000001,
+      "Hyun Bin": 0.52,
+      "Son Ye-jin": 0.52
+    },
+    "directors": {
+      "Shin Won-ho": 0.5800000000000001,
+      "Ki Min-soo": 0.5800000000000001,
+      "Jo Soo-won": 0.5800000000000001,
+      "Lee Jung-hyo": 0.52
+    },
+    "themes": {
+      "friendship": 0.5800000000000001,
+      "medical": 0.6952000000000002,
+      "heartwarming": 0.5840000000000001,
+      "realistic": 0.5800000000000001,
+      "emotional": 0.6352000000000001,
+      "inspiring": 0.5800000000000001,
+      "mystery": 0.5800000000000001,
+      "romance": 0.5840000000000001,
+      "comedy": 0.52
+    },
+    "publishers": {}
+  },
+  "statistics": {
+    "total_interactions": 4,
+    "total_clicks": 0,
+    "total_watchlist_adds": 1,
+    "total_watched": 3,
+    "avg_rating": 4.5,
+    "total_ratings": 3,
+    "rating_style": "generous"
+  },
+  "viewing_patterns": {
+    "preferred_episode_count": 18,
+    "preferred_years": [],
+    "binge_watcher": false,
+    "rating_style": "neutral"
+  },
+  "recent_interactions": [
+    {
+      "drama_title": "Crash Landing on You",
+      "interaction_type": "watchlist_add",
+      "timestamp": "2025-11-10T16:09:03.873502"
+    },
+    {
+      "drama_title": "Doctor John",
+      "interaction_type": "watched",
+      "timestamp": "2025-11-10T16:09:03.842725"
+    },
+    {
+      "drama_title": "Good Doctor",
+      "interaction_type": "watched",
+      "timestamp": "2025-11-10T16:09:03.820766"
+    },
+    {
+      "drama_title": "Hospital Playlist",
+      "interaction_type": "watched",
+      "timestamp": "2025-11-10T16:09:03.790234"
+    }
+  ]
+}
